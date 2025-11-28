@@ -27,6 +27,12 @@ const services = [
 // @component: BankingScaleHero
 export const BankingScaleHero = () => {
 
+  const stats = [
+    "Trusted by 120+ startups",
+    "4.9/5 client rating",
+    "₹25Cr+ revenue optimized",
+    "Average 30% growth boost"
+  ]
 
   const [typingComplete, setTypingComplete] = useState(false)
   const [showServicesDropdown, setShowServicesDropdown] = useState(false)
@@ -76,7 +82,20 @@ export const BankingScaleHero = () => {
 
   // @return
   return (
-    <div className="w-full overflow-hidden bg-white">
+    <>
+      {/* Stats Marquee */}
+      <div className="w-full  bg-[#156d95] py-6 overflow-hidden">
+        <div className="flex animate-marquee whitespace-nowrap">
+          {[...stats, ...stats, ...stats].map((stat, index) => (
+            <div key={index} className="inline-flex items-center mx-8">
+              <span className="text-white font-extrabold font-inter text-sm md:text-3xl ">{stat}</span>
+              <span className="text-white/50 mx-8">•</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <div className="w-full overflow-hidden bg-white">
       <div className="mx-auto max-w-7xl px-8 py-24 pt-16">
         <div className="grid grid-cols-12 gap-5 gap-y-16">
           <div className="col-span-12 md:col-span-6 relative z-10">
@@ -225,5 +244,6 @@ export const BankingScaleHero = () => {
         </div>
       </div>
     </div>
+    </>
   )
 }
