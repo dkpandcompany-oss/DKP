@@ -3,6 +3,66 @@
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+
+type Testimonial = {
+  id: number
+  name: string
+  location: string
+  avatar: string
+  text: string
+  bgColor: string
+}
+
+const testimonials: Testimonial[] = [
+  {
+    id: 1,
+    name: "Olivia Richardson",
+    location: "New York, USA",
+    avatar: "OR",
+    text: "I've tried countless tea brands, but nothing compares to the freshness and aroma of this one. Every sip feels like a warm hug! My mornings are incomplete without it.",
+    bgColor: "bg-gray-100"
+  },
+  {
+    id: 2,
+    name: "Sophia Mitchell",
+    location: "London, UK",
+    avatar: "SM",
+    text: "As a tea lover, I appreciate the rich flavors and organic sourcing. The premium tea has become my go-to for relaxation after a long day.",
+    bgColor: "bg-gray-100"
+  },
+  {
+    id: 3,
+    name: "Aisha Khan",
+    location: "London, UK",
+    avatar: "AK",
+    text: "I never knew tea could taste this good! The flavors are so pure and soothing. Plus, the packaging is beautiful - perfect for gifting too!",
+    bgColor: "bg-gray-100"
+  },
+  {
+    id: 4,
+    name: "Emily Sanders",
+    location: "Sydney, Australia",
+    avatar: "ES",
+    text: "The variety of blends is amazing! Whether I need a morning energy boost or a calming bedtime tea, this brand has it all. Highly recommend!",
+    bgColor: "bg-gray-100"
+  },
+  {
+    id: 5,
+    name: "Priya Deshmukh",
+    location: "Mumbai, India",
+    avatar: "PD",
+    text: "This tea has changed my daily routine for the better! The detox blend helps me feel refreshed and energized. Love the natural ingredients!",
+    bgColor: "bg-gray-100"
+  },
+  {
+    id: 6,
+    name: "Mia Stevens",
+    location: "Toronto, Canada",
+    avatar: "MS",
+    text: "I'm obsessed with the aroma and gives me the perfect after. It must try for all tea lovers!",
+    bgColor: "bg-gray-100"
+  }
+]
 type CaseStudy = {
   id: string
   company: string
@@ -482,245 +542,50 @@ const FigmaSprintCard = ({
   )
 }
 
+const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
+  <div className={`${testimonial.bgColor} rounded-2xl p-6 min-w-[320px] max-w-[320px] mx-2`}>
+    <p className="text-gray-800 text-sm leading-relaxed mb-4 font-inter">
+      "{testimonial.text}"
+    </p>
+    <div className="flex items-center gap-3">
+      <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+        {testimonial.avatar}
+      </div>
+      <div>
+        <p className="font-semibold text-gray-800 text-sm">{testimonial.name}</p>
+        <p className="text-gray-600 text-xs">{testimonial.location}</p>
+      </div>
+    </div>
+  </div>
+)
+
 export const CaseStudiesCarousel = () => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [direction, setDirection] = useState(0)
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
-  const autoPlayRef = useRef<NodeJS.Timeout | null>(null)
-  const currentStudy = caseStudies[currentIndex]
-  const startAutoPlay = () => {
-    if (autoPlayRef.current) clearInterval(autoPlayRef.current)
-    autoPlayRef.current = setInterval(() => {
-      nextSlide()
-    }, 5000)
-  }
-  const stopAutoPlay = () => {
-    if (autoPlayRef.current) {
-      clearInterval(autoPlayRef.current)
-      autoPlayRef.current = null
-    }
-  }
-  useEffect(() => {
-    if (isAutoPlaying) {
-      startAutoPlay()
-    } else {
-      stopAutoPlay()
-    }
-    return () => stopAutoPlay()
-  }, [isAutoPlaying, currentIndex])
-  const nextSlide = () => {
-    setDirection(1)
-    setCurrentIndex((prev) => (prev + 1) % caseStudies.length)
-  }
-  const prevSlide = () => {
-    setDirection(-1)
-    setCurrentIndex((prev) => (prev - 1 + caseStudies.length) % caseStudies.length)
-  }
-  const goToSlide = (index: number) => {
-    setDirection(index > currentIndex ? 1 : -1)
-    setCurrentIndex(index)
-  }
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0,
-    }),
-  }
   return (
-    <div
-      id="reviews"
-      className="w-full min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center py-24 px-8"
-      onMouseEnter={() => setIsAutoPlaying(false)}
-      onMouseLeave={() => setIsAutoPlaying(true)}
-    >
-      <div className="max-w-7xl w-full">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h1
-            className="text-[40px] leading-tight font-normal text-foreground mb-6 tracking-tight"
-            style={{
-              fontWeight: "400",
-              fontFamily: "var(--font-figtree), Figtree",
-              fontSize: "40px",
-            }}
-          >
-            Customer Success Stories
-          </h1>
-          <p
-            className="text-lg leading-7 text-muted-foreground max-w-2xl mx-auto"
-            style={{
-              fontFamily: "var(--font-figtree), Figtree",
-            }}
-          >
-            See how leading teams use Auralink to gain clarity on collaboration and team alignment.
-          </p>
+    <div className="w-full bg-gray-50 py-16 overflow-hidden">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-bold text-gray-800 mb-4 font-inter">
+          What people are saying?
+        </h2>
+        <p className="text-gray-600 max-w-2xl mx-auto font-inter">
+          Don't just take our word for it - see what our customers have to say about their experience!
+        </p>
+      </div>
+
+      {/* First row - moving right */}
+      <div className="mb-6">
+        <div className="flex animate-scroll-right">
+          {[...testimonials, ...testimonials].map((testimonial, index) => (
+            <TestimonialCard key={`row1-${index}`} testimonial={testimonial} />
+          ))}
         </div>
+      </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="space-y-8">
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={currentStudy.id}
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: {
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 30,
-                  },
-                  opacity: {
-                    duration: 0.2,
-                  },
-                }}
-                className="space-y-6"
-              >
-                <div className="text-foreground/60">{currentStudy.logo}</div>
-
-                <h2
-                  className="text-4xl font-bold text-foreground leading-tight tracking-tight"
-                  style={{
-                    fontFamily: "var(--font-figtree), Figtree",
-                    fontWeight: "400",
-                    fontSize: "32px",
-                  }}
-                >
-                  {currentStudy.title}
-                </h2>
-
-                <div className="flex flex-wrap gap-2">
-                  {currentStudy.features.map((feature, idx) => (
-                    <FeatureBadge key={idx} name={feature} />
-                  ))}
-                </div>
-
-                <blockquote className="border-l-4 border-primary pl-6 py-2">
-                  <p
-                    className="text-lg leading-7 text-foreground/80 italic mb-3"
-                    style={{
-                      fontFamily: "var(--font-figtree), Figtree",
-                    }}
-                  >
-                    "{currentStudy.quote}"
-                  </p>
-                  <footer
-                    className="text-sm text-muted-foreground"
-                    style={{
-                      fontFamily: "var(--font-inter), Inter",
-                    }}
-                  >
-                    {currentStudy.attribution}
-                  </footer>
-                </blockquote>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Navigation */}
-            <div className="flex items-center gap-6">
-              <div className="flex gap-2">
-                {caseStudies.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => goToSlide(idx)}
-                    className={`h-2 rounded-full transition-all duration-300 ${idx === currentIndex ? "w-8 bg-primary" : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"}`}
-                    aria-label={`Go to slide ${idx + 1}`}
-                  />
-                ))}
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={prevSlide}
-                  className="p-2 rounded-lg border border-border hover:bg-accent transition-colors"
-                  aria-label="Previous slide"
-                >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path
-                      d="M12.5 15L7.5 10L12.5 5"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-                <button
-                  onClick={nextSlide}
-                  className="p-2 rounded-lg border border-border hover:bg-accent transition-colors"
-                  aria-label="Next slide"
-                >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path
-                      d="M7.5 15L12.5 10L7.5 5"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Content - Card Visualization */}
-          <div className="relative h-[500px] flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStudy.id}
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: 1,
-                }}
-                exit={{
-                  opacity: 0,
-                }}
-                transition={{
-                  duration: 0.3,
-                }}
-                className="relative w-full h-full flex items-center justify-center"
-              >
-                {currentStudy.id === "meridian" && (
-                  <>
-                    <NotionCollaborationCard accentColor={currentStudy.accentColor} delay={0} zIndex={1} />
-                    <SlackCallCard accentColor={currentStudy.accentColor} delay={0.1} zIndex={2} />
-                  </>
-                )}
-                {currentStudy.id === "brighthire" && (
-                  <>
-                    <StripeGlobalCard accentColor={currentStudy.accentColor} delay={0} zIndex={1} />
-                    <SlackCallCard accentColor={currentStudy.accentColor} delay={0.1} zIndex={2} />
-                  </>
-                )}
-                {currentStudy.id === "coreedge" && (
-                  <>
-                    <StripeGlobalCard accentColor={currentStudy.accentColor} delay={0} zIndex={1} />
-                    <SlackCallCard accentColor={currentStudy.accentColor} delay={0.1} zIndex={2} />
-                  </>
-                )}
-                {currentStudy.id === "eightball" && (
-                  <>
-                    <FigmaSprintCard accentColor={currentStudy.accentColor} delay={0} zIndex={1} />
-                    <MeetingTranscriptCard accentColor={currentStudy.accentColor} delay={0.1} zIndex={2} />
-                  </>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+      {/* Second row - moving left */}
+      <div>
+        <div className="flex animate-scroll-left">
+          {[...testimonials.slice(3), ...testimonials.slice(0, 3), ...testimonials.slice(3), ...testimonials.slice(0, 3)].map((testimonial, index) => (
+            <TestimonialCard key={`row2-${index}`} testimonial={testimonial} />
+          ))}
         </div>
       </div>
     </div>

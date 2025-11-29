@@ -6,18 +6,21 @@ import { OurProcess } from "@/components/OurProcess"
 import { PricingSection } from "@/components/PricingSection"
 import { WhoWeServeSection } from "@/components/WhoWeServeSection"
 import { FAQSection } from "@/components/FAQSection"
+import Hero from "@/components/Hero"
 
 export default function Page() {
   return (
     <>
-      <ProductTeaserCard />
+      {/* <ProductTeaserCard /> */}
+      <Hero/>
       <BankingScaleHero />
       <WhoWeServeSection />
       <OurProcess />
       <CaseStudiesCarousel />
-      <IntegrationCarousel />
+      {/* <IntegrationCarousel /> */}
       <PricingSection />
       <FAQSection />
+      
     </>
   )
 }

@@ -76,30 +76,7 @@ export function PricingSection() {
           </div>
         </div>
 
-        {/* FAQ Snippet */}
-        <div className="max-w-3xl mx-auto">
-          <h3 className="text-xl font-semibold text-[#111A4A] mb-6 text-center">Common Questions</h3>
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>Do you offer monthly retainers?</AccordionTrigger>
-              <AccordionContent>
-                Yes! While our core services are project-based, we offer monthly support retainers starting at ₹9,999/month for ongoing advisory and maintenance.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>How does the payment structure work?</AccordionTrigger>
-              <AccordionContent>
-                We typically require a 50% deposit to commence work, with the remaining 50% due upon project completion and handover.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>Can I combine multiple services?</AccordionTrigger>
-              <AccordionContent>
-                Absolutely. You can use our "Build your own package" tool to select multiple services. We often provide a bundle discount for multi-service projects.
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
+
       </div>
 
       {/* Modals & Drawers */}

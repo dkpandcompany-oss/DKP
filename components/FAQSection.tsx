@@ -13,6 +13,21 @@ type FAQSectionProps = {
 }
 const defaultFAQs: FAQItem[] = [
   {
+    question: "Do you offer monthly retainers?",
+    answer:
+      "Yes! While our core services are project-based, we offer monthly support retainers starting at ₹9,999/month for ongoing advisory and maintenance.",
+  },
+  {
+    question: "How does the payment structure work?",
+    answer:
+      "We typically require a 50% deposit to commence work, with the remaining 50% due upon project completion and handover.",
+  },
+  {
+    question: "Can I combine multiple services?",
+    answer:
+      "Absolutely. You can use our 'Build your own package' tool to select multiple services. We often provide a bundle discount for multi-service projects.",
+  },
+  {
     question: "What kind of businesses do you work with?",
     answer:
       "We work with small businesses, startups, and growing companies that need structure, optimization, and strategic direction.",

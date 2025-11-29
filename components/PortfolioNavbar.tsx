@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Menu, X, Home } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePathname, useRouter } from "next/navigation"
+import { useSupabaseAuth } from "@/hooks/use-supabase-auth"
 
 const navigationLinks = [
   {
@@ -64,6 +65,8 @@ export const PortfolioNavbar = () => {
     router.push("/")
   }
 
+  const { user, loading, signOut } = useSupabaseAuth()
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white/80 backdrop-blur-md py-4 shadow-sm" : "bg-transparent py-6"
@@ -115,18 +118,35 @@ export const PortfolioNavbar = () => {
               )}
             </AnimatePresence>
 
-            <motion.button
-              animate={{ x: isContactPage ? -60 : 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              onClick={() => router.push("/contact")}
-              aria-expanded={isContactPage}
-              className="bg-[#156d95] text-white px-[18px] rounded-full text-base font-semibold hover:bg-[#156d95]/90 transition-colors duration-200 shadow-sm hover:shadow-md whitespace-nowrap leading-4 py-[15px] z-20 relative"
-              style={{
-                fontFamily: "Plus Jakarta Sans, sans-serif",
-              }}
-            >
-              Book a Consultation
-            </motion.button>
+            {/* Replace book CTA with auth buttons when not logged in */}
+            {!loading && !user && (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => router.push('/login')}
+                  className="bg-white border border-slate-200 text-[#156d95] px-4 py-2 rounded-full text-sm font-semibold hover:bg-slate-50"
+                >
+                  Log in
+                </button>
+                <button
+                  onClick={() => router.push('/signup')}
+                  className="bg-[#156d95] text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#156d95]/90"
+                >
+                  Sign up
+                </button>
+              </div>
+            )}
+
+            {!loading && user && (
+              <div className="flex items-center gap-3">
+                <div className="text-sm text-gray-700 mr-2">{user.email}</div>
+                <button
+                  onClick={() => signOut()}
+                  className="bg-white border border-slate-200 text-[#156d95] px-4 py-2 rounded-full text-sm font-semibold hover:bg-slate-50"
+                >
+                  Log out
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -164,18 +184,43 @@ export const PortfolioNavbar = () => {
                 </a>
               ))}
               <div className="pt-4 border-t border-border flex flex-col gap-3">
-                <button
-                  onClick={() => {
-                    router.push("/contact")
-                    setIsMobileMenuOpen(false)
-                  }}
-                  className="w-full bg-[#156d95] text-white px-[18px] py-[15px] rounded-full text-base font-semibold hover:bg-[#156d95]/90 transition-all duration-200"
-                  style={{
-                    fontFamily: "Plus Jakarta Sans, sans-serif",
-                  }}
-                >
-                  Book a Consultation
-                </button>
+                {!loading && !user && (
+                  <>
+                    <button
+                      onClick={() => {
+                        router.push('/login')
+                        setIsMobileMenuOpen(false)
+                      }}
+                      className="w-full bg-white border border-slate-200 text-[#156d95] px-[18px] py-[15px] rounded-full text-base font-semibold hover:bg-slate-50 transition-all duration-200"
+                    >
+                      Log in
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        router.push('/signup')
+                        setIsMobileMenuOpen(false)
+                      }}
+                      className="w-full bg-[#156d95] text-white px-[18px] py-[15px] rounded-full text-base font-semibold hover:bg-[#156d95]/90 transition-all duration-200"
+                    >
+                      Sign up
+                    </button>
+                  </>
+                )}
+
+                {!loading && user && (
+                  <>
+                    <button
+                      onClick={() => {
+                        signOut()
+                        setIsMobileMenuOpen(false)
+                      }}
+                      className="w-full bg-white border border-slate-200 text-[#156d95] px-[18px] py-[15px] rounded-full text-base font-semibold hover:bg-slate-50 transition-all duration-200"
+                    >
+                      Log out
+                    </button>
+                  </>
+                )}
 
                 {isContactPage && (
                   <button

@@ -53,7 +53,7 @@ export function ServiceCard({ service, onViewDetails }: ServiceCardProps) {
                     asChild
                     className="w-full bg-[#156d95] hover:bg-[#156d95]/90 text-white rounded-full group-hover:shadow-lg transition-all"
                 >
-                    <Link href={`/contact?service=${service.id}`}>
+                    <Link href={`/checkout?service=${service.id}`}>
                         Book Now
                     </Link>
                 </Button>
