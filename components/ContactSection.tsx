@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Mail, Phone, MapPin, Send, Loader2, Check } from "lucide-react"
+import { ContactFormData } from "@/types/database"
 
 const servicesList = [
     {
@@ -32,6 +33,7 @@ export const ContactSection = () => {
     const [isSuccess, setIsSuccess] = useState(false)
     const [selectedServices, setSelectedServices] = useState<string[]>([])
     const [isOtherSelected, setIsOtherSelected] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
     const toggleService = (id: string) => {
         setSelectedServices((prev) =>
@@ -42,12 +44,45 @@ export const ContactSection = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsSubmitting(true)
+        setError(null)
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500))
+        try {
+            const formData = new FormData(e.target as HTMLFormElement)
+            const otherServiceInput = (e.target as HTMLFormElement).querySelector('input[placeholder="Other (please specify)"]') as HTMLInputElement
 
-        setIsSubmitting(false)
-        setIsSuccess(true)
+            const contactData: ContactFormData = {
+                firstName: formData.get('firstName') as string,
+                lastName: formData.get('lastName') as string || undefined,
+                email: formData.get('email') as string,
+                designation: formData.get('designation') as string || undefined,
+                companyName: formData.get('companyName') as string || undefined,
+                businessField: formData.get('businessField') as string || undefined,
+                selectedServices: selectedServices,
+                otherServiceDescription: isOtherSelected ? otherServiceInput?.value || undefined : undefined,
+            }
+
+            const response = await fetch('/api/consultation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(contactData),
+            })
+
+            const result = await response.json()
+
+            if (!result.success) {
+                setError(result.error || 'Failed to submit form')
+                return
+            }
+
+            setIsSuccess(true)
+        } catch (error) {
+            console.error('Form submission error:', error)
+            setError('Failed to submit form. Please try again.')
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     return (
@@ -136,6 +171,12 @@ export const ContactSection = () => {
                             </motion.div>
                         ) : (
                             <form onSubmit={handleSubmit} className="flex flex-col h-full">
+                                {error && (
+                                    <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+                                        {error}
+                                    </div>
+                                )}
+                                
                                 <div className="grid lg:grid-cols-2 gap-8 mb-8">
                                     {/* Left Column: Fields */}
                                     <div className="space-y-4">
@@ -143,6 +184,7 @@ export const ContactSection = () => {
                                             <label htmlFor="companyName" className="text-sm font-medium text-[#111A4A]">Company name</label>
                                             <input
                                                 id="companyName"
+                                                name="companyName"
                                                 type="text"
                                                 className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#156d95] focus:ring-2 focus:ring-[#156d95]/20 outline-none transition-all"
                                                 placeholder="Company name"
@@ -153,6 +195,7 @@ export const ContactSection = () => {
                                             <label htmlFor="businessField" className="text-sm font-medium text-[#111A4A]">Field of business</label>
                                             <input
                                                 id="businessField"
+                                                name="businessField"
                                                 type="text"
                                                 className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#156d95] focus:ring-2 focus:ring-[#156d95]/20 outline-none transition-all"
                                                 placeholder="E.g., Retail / SaaS / Food service"
@@ -161,9 +204,10 @@ export const ContactSection = () => {
 
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="space-y-1.5">
-                                                <label htmlFor="firstName" className="text-sm font-medium text-[#111A4A]">First name</label>
+                                                <label htmlFor="firstName" className="text-sm font-medium text-[#111A4A]">First name *</label>
                                                 <input
                                                     id="firstName"
+                                                    name="firstName"
                                                     required
                                                     type="text"
                                                     className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#156d95] focus:ring-2 focus:ring-[#156d95]/20 outline-none transition-all"
@@ -174,6 +218,7 @@ export const ContactSection = () => {
                                                 <label htmlFor="lastName" className="text-sm font-medium text-[#111A4A]">Last name</label>
                                                 <input
                                                     id="lastName"
+                                                    name="lastName"
                                                     type="text"
                                                     className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#156d95] focus:ring-2 focus:ring-[#156d95]/20 outline-none transition-all"
                                                     placeholder="Last name"
@@ -185,6 +230,7 @@ export const ContactSection = () => {
                                             <label htmlFor="designation" className="text-sm font-medium text-[#111A4A]">Your designation</label>
                                             <input
                                                 id="designation"
+                                                name="designation"
                                                 type="text"
                                                 className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#156d95] focus:ring-2 focus:ring-[#156d95]/20 outline-none transition-all"
                                                 placeholder="Founder / COO / Head of Ops"
@@ -192,9 +238,10 @@ export const ContactSection = () => {
                                         </div>
 
                                         <div className="space-y-1.5">
-                                            <label htmlFor="email" className="text-sm font-medium text-[#111A4A]">Email address</label>
+                                            <label htmlFor="email" className="text-sm font-medium text-[#111A4A]">Email address *</label>
                                             <input
                                                 id="email"
+                                                name="email"
                                                 required
                                                 type="email"
                                                 className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#156d95] focus:ring-2 focus:ring-[#156d95]/20 outline-none transition-all"

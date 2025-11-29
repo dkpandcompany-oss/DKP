@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import Link from "next/link";
 import { TrendingUp, Wallet, Smartphone } from "lucide-react";
 
 const services = [
@@ -8,7 +9,7 @@ const services = [
     icon: TrendingUp,
     title: "+30%",
     subtitle: "Revenue efficiency",
-    position: "top-[50%] left-[2%] md:top-[50%] md:-left-[5%] transform -translate-y-1/2",
+    position: "top-[50%] left-[2%] md:top-[50%]  md:-left-[5%] transform -translate-y-1/2",
   },
   {
     id: 2,
@@ -77,7 +78,7 @@ const Hero = () => {
           sizes="120vw"
         />
       </div>
-      <div className="absolute  -bottom-[6%] left-1/2 transform -translate-x-1/2 w-full md:w-[560px] lg:w-[850px]">
+      <div className="absolute   -bottom-[6%] left-1/2 transform -translate-x-1/2 w-full md:w-[560px] lg:w-[850px]">
         <div className="relative w-full h-[78vh]">
           <Image
             src="/heroPage/women.svg"
@@ -117,10 +118,13 @@ const Hero = () => {
       </div>
 
       <div className="absolute left-1/2 bottom-5 sm:bottom-6 md:bottom-10 transform -translate-x-1/2 w-[80%] sm:w-full max-w-xl px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 bg-white/70 backdrop-blur-md border border-white/20 rounded-2xl sm:rounded-3xl shadow-2xl z-30">
-        <div className="flex relative flex-row justify-center gap-2 sm:gap-3">
-          <button className="bg-[#156d95] text-white px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full text-sm sm:text-base whitespace-nowrap">
+          <div className="flex relative flex-row justify-center gap-2 sm:gap-3">
+          <Link
+            href="/checkout"
+            className="bg-[#156d95] text-white px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full text-sm sm:text-base whitespace-nowrap inline-flex items-center justify-center"
+          >
             Book a Consultation
-          </button>
+          </Link>
           <button className="bg-white/20 shadow-2xl text-black px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full backdrop-blur-sm text-sm sm:text-base whitespace-nowrap">
             Explore Services
           </button>

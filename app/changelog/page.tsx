@@ -56,12 +56,12 @@ export default function ChangelogPage() {
 
                 <div className="mt-16 p-8 bg-[#F0F9FF] rounded-2xl text-center">
                     <h3 className="text-xl font-semibold mb-4 text-[#202020]">Stay updated with our progress</h3>
-                    <Link
-                        href="/contact#consultation"
-                        className="inline-block bg-[#156d95] text-white px-8 py-3 rounded-full font-medium hover:bg-[#156d95]/90 transition-colors"
-                    >
-                        Book a Consultation →
-                    </Link>
+                        <Link
+                            href="/checkout"
+                            className="inline-block bg-[#156d95] text-white px-8 py-3 rounded-full font-medium hover:bg-[#156d95]/90 transition-colors"
+                        >
+                            Book a Consultation →
+                        </Link>
                 </div>
             </main>
         </>

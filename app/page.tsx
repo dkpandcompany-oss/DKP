@@ -17,7 +17,7 @@ export default function Page() {
       <WhoWeServeSection />
       <OurProcess />
       <CaseStudiesCarousel />
-      <IntegrationCarousel />
+      {/* <IntegrationCarousel /> */}
       <PricingSection />
       <FAQSection />
       

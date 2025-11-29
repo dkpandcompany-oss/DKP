@@ -89,7 +89,7 @@ export const BankingScaleHero = () => {
           {[...stats, ...stats, ...stats].map((stat, index) => (
             <div key={index} className="inline-flex items-center mx-8">
               <span className="text-white font-extrabold font-inter text-sm md:text-3xl ">{stat}</span>
-              <span className="text-white/50 mx-8">•</span>
+              <span className="text-white/50 mx-8 text-sm md:text-3xl">•</span>
             </div>
           ))}
         </div>
