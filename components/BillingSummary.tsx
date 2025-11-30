@@ -82,10 +82,10 @@ export default function BillingSummary({
               {oneTimeAddons.map((addon) => (
                 <div key={addon.id} className="flex justify-between items-start">
                   <div className="flex-1">
-                  <p className="text-sm">{addon.name}</p>
-                  <Badge className={getTypeColor(addon.type)} size="sm">
-                    {getTypeLabel(addon.type)}
-                  </Badge>
+                    <p className="text-sm">{addon.name}</p>
+                    <Badge className={getTypeColor(addon.type)}>
+                      {getTypeLabel(addon.type)}
+                    </Badge>
                 </div>
                 <p className="text-sm font-medium">{formatCurrency(addon.price)}</p>
                 </div>
@@ -106,7 +106,7 @@ export default function BillingSummary({
                 <div key={addon.id} className="flex justify-between items-start">
                   <div className="flex-1">
                   <p className="text-sm">{addon.name}</p>
-                  <Badge className={getTypeColor(addon.type)} size="sm">
+                  <Badge className={getTypeColor(addon.type)}>
                     {getTypeLabel(addon.type)}
                   </Badge>
                 </div>
