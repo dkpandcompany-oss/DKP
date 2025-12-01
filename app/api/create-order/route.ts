@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import Razorpay from 'razorpay';
 
 const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
@@ -55,6 +56,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Initialize Razorpay instance
+    const razorpay = new Razorpay({
+      key_id: RAZORPAY_KEY_ID,
+      key_secret: RAZORPAY_KEY_SECRET,
+    });
+
     // Create Razorpay order
     const orderData = {
       amount: Math.round(amount * 100), // Convert to paisa
@@ -64,35 +71,7 @@ export async function POST(request: NextRequest) {
 
     console.log('Creating Razorpay order with data:', orderData);
 
-    const response = await fetch('https://api.razorpay.com/v1/orders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Basic ${Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString('base64')}`,
-      },
-      body: JSON.stringify(orderData),
-    });
-
-    console.log('Razorpay response status:', response.status);
-
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Razorpay API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorData,
-      });
-      
-      return NextResponse.json(
-        { 
-          error: `Failed to create Razorpay order: ${response.status} ${response.statusText}`,
-          details: errorData,
-        },
-        { status: 500 }
-      );
-    }
-
-    const order = await response.json();
+    const order = await razorpay.orders.create(orderData);
     console.log('Razorpay order created successfully:', order);
     
     return NextResponse.json({

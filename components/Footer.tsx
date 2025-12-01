@@ -97,7 +97,7 @@ export const Footer = ({
           >
             <div className="mb-4">
               <div className="flex items-center gap-2">
-                <img src="/images/logo.jpeg" alt="DPK Logo" className="h-8 w-auto object-contain" />
+                <img src="/Logo.png" alt="DPK Logo" className="h-8 w-auto object-contain" />
                 <span className="text-xl font-semibold text-[#202020]" style={{ fontFamily: "Figtree", fontWeight: "600" }}>
                   DPK & company
                 </span>

@@ -59,22 +59,37 @@ export function PricingSection() {
         </div>
 
         {/* Custom Package CTA */}
-        <div className="bg-[#111A4A] rounded-3xl p-8 md:p-12 text-center relative overflow-hidden mb-16">
-          <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
-          <div className="relative z-10">
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Need a custom solution?</h3>
-            <p className="text-slate-300 mb-8 max-w-xl mx-auto">
-              Mix and match services to create a package that fits your specific goals and budget.
-            </p>
-            <Button
-              onClick={() => setIsDrawerOpen(true)}
-              className="bg-white text-[#111A4A] hover:bg-slate-100 text-lg px-8 py-6 rounded-full font-semibold"
-            >
-              <Plus className="w-5 h-5 mr-2" />
-              Build your own package
-            </Button>
-          </div>
-        </div>
+        <div className="relative rounded-3xl p-8 md:p-12 text-center overflow-hidden mb-16 bg-[#111A4A]">
+  {/* Radial background rings */}
+  <div className="absolute inset-0">
+    <div className="absolute -right-40 top-0 w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.35)_0%,rgba(17,26,74,0)_70%)]"></div>
+    <div className="absolute -right-20 top-20 w-[450px] h-[450px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.15)_0%,rgba(17,26,74,0)_75%)]"></div>
+    <div className="absolute right-0 top-40 w-[300px] h-[300px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.08)_0%,rgba(17,26,74,0)_80%)]"></div>
+
+    {/* subtle texture (optional) */}
+    <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+  </div>
+
+  {/* Content */}
+  <div className="relative z-10">
+    <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+      Need a custom solution?
+    </h3>
+
+    <p className="text-slate-300 mb-8 max-w-xl mx-auto">
+      Mix and match services to create a package that fits your specific goals and budget.
+    </p>
+
+    <Button
+      onClick={() => setIsDrawerOpen(true)}
+      className="bg-white text-[#111A4A] hover:bg-slate-100 text-lg px-8 py-6 rounded-full font-semibold"
+    >
+      <Plus className="w-5 h-5 mr-2" />
+      Build your own package
+    </Button>
+  </div>
+</div>
+
 
 
       </div>

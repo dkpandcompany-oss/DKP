@@ -5,27 +5,54 @@ import { AnimatePresence, motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 
 
-const services = [
-  {
-    title: "Operations & Small Business Optimization",
-    description: "Streamline workflows, create SOPs, and build scalable operational systems.",
-  },
-  {
-    title: "Financial Management & Cost Control",
-    description: "Budgeting, forecasting, cash-flow clarity, and targeted cost-reduction strategies.",
-  },
-  {
-    title: "Business Development & Strategic Partnerships",
-    description: "Market expansion, partner identification, and sales pipeline structure.",
-  },
-  {
-    title: "Marketing & Web Consulting",
-    description: "Website strategy, digital branding, messaging, and visibility improvements.",
-  },
-]
-
 // @component: BankingScaleHero
 export const BankingScaleHero = () => {
+  const services = [
+    {
+      title: "Operations & Small Business Optimization",
+      description: "Design efficient workflows, create SOPs, map internal processes, and build scalable operational systems that reduce manual effort and improve team performance.",
+      highlights: [
+        "Process documentation & automation",
+        "SOP creation for consistent execution",
+        "Operational bottleneck identification",
+        "Workload distribution & team efficiency planning",
+        "Tools & software recommendations"
+      ]
+    },
+    {
+      title: "Financial Management & Cost Control",
+      description: "Bring financial clarity to your business with structured budgeting, monthly forecasting, expense tracking, and cost-optimization strategies that strengthen profitability.",
+      highlights: [
+        "Budget planning & allocation",
+        "Cash-flow monitoring & reporting",
+        "Financial forecasting & scenario planning",
+        "Cost-cutting recommendations based on data",
+        "Revenue tracking dashboards"
+      ]
+    },
+    {
+      title: "Business Development & Strategic Partnerships",
+      description: "Accelerate growth through structured business development, partner research, market expansion strategies, and a well-defined sales pipeline that drives steady revenue.",
+      highlights: [
+        "Market & competitor analysis",
+        "Lead sourcing & partnership outreach",
+        "Sales pipeline setup & CRM structuring",
+        "Revenue opportunity mapping",
+        "Pitch materials & proposal assistance"
+      ]
+    },
+    {
+      title: "Marketing & Web Consulting",
+      description: "Strengthen your digital presence with refined messaging, website strategy, branding guidance, and marketing insights optimized for reach, conversion, and trust.",
+      highlights: [
+        "Website UI/UX review & recommendations",
+        "SEO suggestions & visibility improvements",
+        "Brand positioning & content strategy",
+        "Social media content direction",
+        "Performance tracking setup (analytics, heatmaps)"
+      ]
+    }
+  ]
 
   const stats = [
     "Trusted by 120+ startups",
@@ -176,7 +203,21 @@ export const BankingScaleHero = () => {
 
             <div className="relative inline-block">
               <button
-                onClick={() => setShowServicesDropdown(!showServicesDropdown)}
+                onClick={() => {
+                  setShowServicesDropdown(!showServicesDropdown)
+                  if (!showServicesDropdown) {
+                    // Scroll to services section after animation completes
+                    setTimeout(() => {
+                      const servicesElement = document.getElementById('services-section')
+                      if (servicesElement) {
+                        servicesElement.scrollIntoView({ 
+                          behavior: 'smooth', 
+                          block: 'start' 
+                        })
+                      }
+                    }, 350)
+                  }
+                }}
                 aria-expanded={showServicesDropdown}
                 aria-controls="services-dropdown"
                 className="relative inline-flex justify-center items-center leading-4 text-center cursor-pointer whitespace-nowrap outline-none font-medium h-9 text-[#232730] bg-white/50 backdrop-blur-sm shadow-[0_1px_1px_0_rgba(255,255,255,0),0_0_0_1px_rgba(87,90,100,0.12)] transition-all duration-200 ease-in-out rounded-lg px-4 mt-5 text-sm group hover:shadow-[0_1px_2px_0_rgba(0,0,0,0.05),0_0_0_1px_rgba(87,90,100,0.18)]"
@@ -206,39 +247,83 @@ export const BankingScaleHero = () => {
             </motion.div>
           </div>
 
-          <AnimatePresence>
-            {showServicesDropdown && (
-              <motion.div
-                id="services-dropdown"
-                initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                animate={{ opacity: 1, height: "auto", marginTop: 32 }}
-                exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="col-span-12 overflow-hidden"
-              >
-                <div
-                  ref={dropdownRef}
-                  className="bg-slate-50/80 rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm outline-none"
-                  tabIndex={-1}
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {services.map((service, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1, duration: 0.4 }}
-                        className="flex flex-col gap-2 p-4 bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
-                      >
-                        <h3 className="text-base font-semibold text-[#111A4A]">{service.title}</h3>
-                        <p className="text-sm text-slate-600 leading-relaxed">{service.description}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+<AnimatePresence>
+  {showServicesDropdown && (
+    <motion.div
+      id="services-section"
+      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+      animate={{ opacity: 1, height: "auto", marginTop: 32 }}
+      exit={{ opacity: 0, height: 0, marginTop: 0 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="col-span-12 overflow-hidden"
+    >
+      <div
+        ref={dropdownRef}
+        className="rounded-2xl mt-10 p-6 md:p-8 border border-slate-100  outline-none"
+        tabIndex={-1}
+      >
+        <div
+          className="
+            grid 
+            grid-cols-1 
+            md:grid-cols-2 
+            lg:grid-cols-4 
+            gap-6 
+            divide-y md:divide-y-0 md:divide-x 
+            divide-slate-200
+          "
+        >
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
+              className={`
+                flex flex-col gap-3 
+                p-6 
+                bg-white 
+                rounded-xl 
+                shadow-sm 
+                hover:shadow-md 
+                transition-shadow 
+                relative
+                ${index==1?" border-2 border-r-[#156d95]":""}
+              `}
+            >
+              <h3 className="text-lg font-semibold text-[#111A4A]">
+                {service.title}
+              </h3>
+
+              <p className="text-sm text-slate-600 leading-relaxed">
+                {service.description}
+              </p>
+
+              <div className="mt-2">
+                <h4 className="text-xs font-medium text-[#111A4A] mb-2 opacity-70">
+                  Key Areas:
+                </h4>
+
+                <ul className="text-xs text-slate-600 space-y-1">
+                  {service.highlights.map((highlight, highlightIndex) => (
+                    <li
+                      key={highlightIndex}
+                      className="flex items-start gap-1"
+                    >
+                      <span className="text-[#156d95] mt-1">•</span>
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
+
 
 
         </div>

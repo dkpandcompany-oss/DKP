@@ -5,6 +5,7 @@ import { Menu, X, Home } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePathname, useRouter } from "next/navigation"
 import { useSupabaseAuth } from "@/hooks/use-supabase-auth"
+import Image from "next/image"
 
 const navigationLinks = [
   {
@@ -75,13 +76,14 @@ export const PortfolioNavbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex-shrink-0 cursor-pointer" onClick={handleHomeClick}>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#156d95] rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">D</span>
-              </div>
-              <span className="text-[#111A4A] font-bold text-xl tracking-tight">DPK & Co.</span>
-            </div>
+          <div className="cursor-pointer " onClick={handleHomeClick}>
+            <Image
+            src={'/Logo.png'}
+            width={100}
+            height={100}
+            alt="Logo dpk"
+            className=" object-cover scale-105"
+            />
           </div>
 
           {/* Desktop Navigation */}
@@ -91,10 +93,10 @@ export const PortfolioNavbar = () => {
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleLinkClick(e, link.href)}
-                className="text-[#111A4A] hover:text-[#156d95] px-1 py-2 text-base font-medium transition-colors duration-200 relative group"
+                className="text-[#111A4A] hover:text-[#156d95] px-1 py-1 text-base font-medium transition-colors duration-200 relative group"
                 style={{ fontFamily: "var(--font-figtree), sans-serif" }}
               >
-                <span>{link.name}</span>
+                <span className="md:text-xl">{link.name}</span>
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#156d95] transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
