@@ -1,216 +1,92 @@
 "use client"
-import { Github, Twitter, Linkedin, Mail } from "lucide-react"
+
+import Link from "next/link"
+import { Instagram, Twitter, Youtube, Linkedin } from "lucide-react"
 import { motion } from "framer-motion"
 
-type FooterLink = {
-  label: string
-  href: string
-}
-
-type FooterSection = {
-  title: string
-  links: FooterLink[]
-}
-
-type FooterProps = {
-  companyName?: string
-  tagline?: string
-  sections?: FooterSection[]
-  socialLinks?: {
-    twitter?: string
-    linkedin?: string
-    github?: string
-    email?: string
-  }
-  copyrightText?: string
-}
-
-const defaultSections: FooterSection[] = [
-  {
-    title: "Product",
-    links: [
-      { label: "Features", href: "/features" },
-      { label: "Integrations", href: "/integrations" },
-      { label: "Pricing", href: "/pricing" },
-      { label: "API Docs", href: "/api-docs" },
-      { label: "Changelog", href: "/changelog" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { label: "About", href: "/about" },
-      { label: "Careers", href: "/careers" },
-      { label: "Blog", href: "/blog" },
-      { label: "Press Kit", href: "/press-kit" },
-      { label: "Contact", href: "/contact" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Documentation", href: "/documentation" },
-      { label: "Help Center", href: "/help-center" },
-      { label: "Community", href: "/community" },
-      { label: "Case Studies", href: "/case-studies" },
-      { label: "Webinars", href: "/webinars" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Service", href: "/terms" },
-      { label: "Security", href: "/security" },
-      { label: "Compliance", href: "/compliance" },
-      { label: "Cookie Policy", href: "/cookie-policy" },
-    ],
-  },
-]
-
-export const Footer = ({
-  companyName = "DPK Consultants",
-  tagline = "Strategic solutions for operational clarity, financial strength, and business growth.",
-  sections = defaultSections,
-  socialLinks = {
-    twitter: "https://twitter.com",
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
-    email: "info@dpkconsultants.com",
-  },
-  copyrightText,
-}: FooterProps) => {
-  const currentYear = new Date().getFullYear()
-  const copyright = copyrightText || `© ${currentYear} ${companyName}. All rights reserved.`
+export const Footer = () => {
   return (
-    <footer className="w-full bg-[#fafafa] border-t border-[#e5e5e5]">
-      <div className="max-w-[1200px] mx-auto px-8 py-16">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-12">
-          {/* Brand Column */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="col-span-2"
+    <footer className="w-full bg-[#f4f4f4] border-t border-black/10 relative overflow-hidden">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-20">
+
+        {/* Top CTA */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-20 gap-8">
+          <h2 className="text-3xl md:text-5xl font-light leading-tight text-black max-w-2xl">
+            Guiding founders & companies toward clarity and growth.
+          </h2>
+
+          <Link
+            href="/contact"
+            className="group inline-flex items-center justify-center px-8 py-4 
+              rounded-full border border-black text-black text-lg font-medium 
+              hover:bg-black hover:text-white transition-all duration-300"
           >
-            <div className="mb-4">
-              <div className="flex items-center gap-2">
-                <img src="/Logo.png" alt="DPK Logo" className="h-8 w-auto object-contain" />
-                <span className="text-xl font-semibold text-[#202020]" style={{ fontFamily: "Figtree", fontWeight: "600" }}>
-                  DPK & company
-                </span>
-              </div>
-              <p className="text-sm leading-5 text-[#666666] max-w-xs" style={{ fontFamily: "Figtree" }}>
-                {tagline}
-              </p>
-            </div>
-
-            {/* Social Links */}
-            <div className="flex items-center gap-3 mt-6">
-              {socialLinks.twitter && (
-                <a
-                  href={socialLinks.twitter}
-                  className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-[#e5e5e5] text-[#666666] hover:text-[#202020] hover:border-[#202020] transition-colors duration-150"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="w-4 h-4" />
-                </a>
-              )}
-              {socialLinks.linkedin && (
-                <a
-                  href={socialLinks.linkedin}
-                  className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-[#e5e5e5] text-[#666666] hover:text-[#202020] hover:border-[#202020] transition-colors duration-150"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="w-4 h-4" />
-                </a>
-              )}
-              {socialLinks.github && (
-                <a
-                  href={socialLinks.github}
-                  className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-[#e5e5e5] text-[#666666] hover:text-[#202020] hover:border-[#202020] transition-colors duration-150"
-                  aria-label="GitHub"
-                >
-                  <Github className="w-4 h-4" />
-                </a>
-              )}
-              {socialLinks.email && (
-                <a
-                  href={`mailto:${socialLinks.email}`}
-                  className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-[#e5e5e5] text-[#666666] hover:text-[#202020] hover:border-[#202020] transition-colors duration-150"
-                  aria-label="Email"
-                >
-                  <Mail className="w-4 h-4" />
-                </a>
-              )}
-            </div>
-          </motion.div>
-
-          {/* Link Sections */}
-          {sections.map((section, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
-              className="col-span-1"
-            >
-              <h4
-                className="text-sm font-medium text-[#202020] mb-4 uppercase tracking-wide"
-                style={{ fontFamily: "Figtree", fontWeight: "500" }}
-              >
-                {section.title}
-              </h4>
-              <ul className="space-y-3">
-                {section.links.map((link, linkIndex) => (
-                  <li key={linkIndex}>
-                    <a
-                      href={link.href}
-                      className="text-sm text-[#666666] hover:text-[#202020] transition-colors duration-150"
-                      style={{ fontFamily: "Figtree" }}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
+            Let's talk
+          </Link>
         </div>
 
-        {/* Bottom Bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="pt-8 border-t border-[#e5e5e5]"
-        >
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-[#666666]" style={{ fontFamily: "Figtree" }}>
-              {copyright}
-            </p>
-            <div className="flex items-center gap-6">
-              <a
-                href="#status"
-                className="text-sm text-[#666666] hover:text-[#202020] transition-colors duration-150"
-                style={{ fontFamily: "Figtree" }}
-              >
-                Status
-              </a>
-              <a
-                href="#sitemap"
-                className="text-sm text-[#666666] hover:text-[#202020] transition-colors duration-150"
-                style={{ fontFamily: "Figtree" }}
-              >
-                Sitemap
-              </a>
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-20">
+
+          {/* Column 1 */}
+          <div>
+            <h4 className="text-sm font-medium uppercase tracking-wide text-black mb-4">
+              Company
+            </h4>
+            <ul className="space-y-3">
+              <li><Link href="/about" className="text-gray-600 hover:text-black transition">About</Link></li>
+              <li><Link href="/services" className="text-gray-600 hover:text-black transition">Services</Link></li>
+              <li><Link href="/case-studies" className="text-gray-600 hover:text-black transition">Case Studies</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 2 */}
+          <div>
+            <h4 className="text-sm font-medium uppercase tracking-wide text-black mb-4">
+              Resources
+            </h4>
+            <ul className="space-y-3">
+              <li><Link href="/pricing" className="text-gray-600 hover:text-black transition">Pricing</Link></li>
+              <li><Link href="/faq" className="text-gray-600 hover:text-black transition">FAQs</Link></li>
+              <li><Link href="/contact" className="text-gray-600 hover:text-black transition">Contact</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 3 — Social */}
+          <div>
+            <h4 className="text-sm font-medium uppercase tracking-wide text-black mb-4">
+              Connect
+            </h4>
+            <div className="flex items-center gap-4">
+              <Link href="#" className="text-gray-700 hover:text-black"><Twitter className="w-5 h-5" /></Link>
+              <Link href="#" className="text-gray-700 hover:text-black"><Instagram className="w-5 h-5" /></Link>
+              <Link href="#" className="text-gray-700 hover:text-black"><Youtube className="w-5 h-5" /></Link>
+              <Link href="#" className="text-gray-700 hover:text-black"><Linkedin className="w-5 h-5" /></Link>
             </div>
           </div>
-        </motion.div>
+        </div>
+
+        {/* Brand Section */}
+        {/* <div className="relative flex justify-center select-none">
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 0.15, y: 0 }}
+            transition={{ duration: 1 }}
+            className="text-[10rem] md:text-[14rem] lg:text-[18rem] font-bold tracking-tight text-black"
+          >
+            DKP
+          </motion.h1>
+        </div> */}
+
+        {/* Bottom bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center mt-10 text-sm text-gray-600">
+          <p>© {new Date().getFullYear()} DKP Consulting. All rights reserved.</p>
+          <div className="flex items-center gap-6 mt-4 md:mt-0">
+            <Link href="/privacy" className="hover:text-black">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-black">Terms</Link>
+          </div>
+        </div>
+
       </div>
     </footer>
   )

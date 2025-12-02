@@ -246,16 +246,16 @@ export default function AdminDashboard({ user }: { user: any }) {
         {/* Main Content */}
         <Tabs defaultValue="payments" className="space-y-6">
           <TabsList className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <TabsTrigger value="payments" className="text-white data-[state=active]:bg-[#156d95] data-[state=active]:text-white">
+            <TabsTrigger value="payments" className="text-black data-[state=active]:bg-[#156d95] data-[state=active]:text-white">
               Payments
             </TabsTrigger>
-            <TabsTrigger value="consultations" className="text-white data-[state=active]:bg-[#156d95] data-[state=active]:text-white">
+            <TabsTrigger value="consultations" className="text-black data-[state=active]:bg-[#156d95] data-[state=active]:text-white">
               Consultations
             </TabsTrigger>
-            <TabsTrigger value="users" className="text-white data-[state=active]:bg-[#156d95] data-[state=active]:text-white">
+            <TabsTrigger value="users" className="text-black data-[state=active]:bg-[#156d95] data-[state=active]:text-white">
               Users
             </TabsTrigger>
-            <TabsTrigger value="settings" className="text-white data-[state=active]:bg-[#156d95] data-[state=active]:text-white">
+            <TabsTrigger value="settings" className="text-black data-[state=active]:bg-[#156d95] data-[state=active]:text-white">
               Settings
             </TabsTrigger>
           </TabsList>

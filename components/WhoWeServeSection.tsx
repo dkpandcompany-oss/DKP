@@ -28,8 +28,13 @@ const segments = [
 // @component: WhoWeServeSection
 export const WhoWeServeSection = () => {
     return (
-        <section id="services" className="w-full bg-white py-24 px-8">
-            <div className="max-w-7xl mx-auto">
+        <section id="services" className="w-full bg-white py-24 px-8 relative">
+            {/* Dotted background */}
+            <div 
+                className="absolute inset-0 opacity-10"
+               
+            />
+            <div className="max-w-7xl mx-auto relative z-10">
                 <div className="mb-16">
                     <h2
                         className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] mb-4"

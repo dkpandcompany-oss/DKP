@@ -1,7 +1,7 @@
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -118,10 +118,9 @@ export const CaseStudiesCarousel = () => {
         {/* Swiper */}
         <div className="relative w-full">
           <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
+            modules={[Navigation, Pagination]}
             spaceBetween={28}
             loop
-            autoplay={{ delay: 3000 }}
             pagination={{
               clickable: true,
               el: ".swiper-pagination-custom",

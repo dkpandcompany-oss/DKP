@@ -10,26 +10,8 @@ export function AdminAccess() {
   if (loading) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-50">
-      {user ? (
-        isAdmin ? (
-          <Link href="/admin">
-            <Button variant="outline" size="sm" className="bg-blue-600 text-white hover:bg-blue-700">
-              Admin Dashboard
-            </Button>
-          </Link>
-        ) : (
-          <div className="text-sm text-gray-600">
-            Logged in as: {user.email}
-          </div>
-        )
-      ) : (
-        <Link href="/auth/login">
-          {/* <Button variant="outline" size="sm">
-            Admin Login
-          </Button> */}
-        </Link>
-      )}
+     <div className="fixed top-4 right-4 z-50">
+       
     </div>
   );
 }
