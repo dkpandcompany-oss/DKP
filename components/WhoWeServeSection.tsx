@@ -9,16 +9,19 @@ const segments = [
         title: "Growing Companies",
         description:
             "We help businesses scaling quickly to remove operational friction, align finance and growth priorities, and build systems for stable expansion.",
+        href: "/growing-companies"
     },
     {
         title: "Startups",
         description:
             "For early-stage ventures we validate business models, create practical processes, improve cash efficiency, and prepare firms for investor readiness.",
+        href: "/startups"
     },
     {
         title: "Founders & Solopreneurs",
         description:
             "For individuals doing everything, we streamline daily workflows, bring financial clarity, and create a professional digital presence that supports growth.",
+        href: "/founders"
     },
 ]
 
@@ -56,7 +59,7 @@ export const WhoWeServeSection = () => {
     )
 }
 
-const Card = ({ title, description }: { title: string; description: string }) => {
+const Card = ({ title, description, href }: { title: string; description: string; href: string }) => {
     const ref = useRef<HTMLDivElement>(null)
 
     const x = useMotionValue(0)
@@ -97,7 +100,7 @@ const Card = ({ title, description }: { title: string; description: string }) =>
                 <h3 className="text-2xl font-semibold text-[#111A4A] mb-4">{title}</h3>
                 <p className="text-base text-slate-600 leading-relaxed mb-8 flex-grow">{description}</p>
 
-                <a href="/contact" className="inline-flex items-center text-[#156d95] font-medium text-sm hover:gap-2 transition-all group-hover:text-[#167E6C]">
+                <a href={href} className="inline-flex items-center text-[#156d95] font-medium text-sm hover:gap-2 transition-all group-hover:text-[#167E6C]">
                     Learn how we help <ArrowRight className="w-4 h-4 ml-1" />
                 </a>
             </div>

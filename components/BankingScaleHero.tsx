@@ -285,7 +285,7 @@ export const BankingScaleHero = () => {
                 bg-white 
                 rounded-xl 
                 shadow-sm 
-                hover:shadow-md 
+                hover:shadow-lg 
                 transition-shadow 
                 relative
                 ${index==1?" border-2 border-r-[#156d95]":""}

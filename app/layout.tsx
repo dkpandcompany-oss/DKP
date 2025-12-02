@@ -3,8 +3,7 @@ import type { Metadata } from "next"
 import { Figtree, Inter, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
 import "./globals.css"
-import { PortfolioNavbar } from "@/components/PortfolioNavbar"
-import { Footer } from "@/components/Footer"
+import { LayoutContent } from "@/components/LayoutContent"
 
 const figtree = Figtree({
   subsets: ["latin"],
@@ -41,10 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${figtree.variable} ${geistMono.variable} antialiased`}>
-
-        <PortfolioNavbar />
-        {children}
-        <Footer />
+        <LayoutContent>{children}</LayoutContent>
         <Analytics />
       </body>
     </html>

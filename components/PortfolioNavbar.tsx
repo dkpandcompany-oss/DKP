@@ -5,6 +5,7 @@ import { Menu, X, Home } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePathname, useRouter } from "next/navigation"
 import { useSupabaseAuth } from "@/hooks/use-supabase-auth"
+import { isAdminEmail } from "@/lib/admin"
 import Image from "next/image"
 
 const navigationLinks = [
@@ -138,7 +139,8 @@ export const PortfolioNavbar = () => {
               </div>
             )}
 
-            {!loading && user && (
+            {/* Hide auth section for admin users */}
+            {!loading && user && !isAdminEmail(user.email || '') && (
               <div className="flex items-center gap-3">
                 <div className="text-sm text-gray-700 mr-2">{user.email}</div>
                 <button
@@ -210,7 +212,8 @@ export const PortfolioNavbar = () => {
                   </>
                 )}
 
-                {!loading && user && (
+                {/* Hide auth section for admin users */}
+                {!loading && user && !isAdminEmail(user.email || '') && (
                   <>
                     <button
                       onClick={() => {

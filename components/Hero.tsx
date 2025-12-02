@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
@@ -120,12 +121,34 @@ const Hero = () => {
       <div className="absolute left-1/2 bottom-5 sm:bottom-6 md:bottom-10 transform -translate-x-1/2 w-[80%] sm:w-full max-w-xl px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 bg-white/70 backdrop-blur-md border border-white/20 rounded-2xl sm:rounded-3xl shadow-2xl z-30">
           <div className="flex relative flex-row justify-center gap-2 sm:gap-3">
           <Link
-            href="/checkout"
+            href="/contact"
             className="bg-[#156d95] text-white px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full text-sm sm:text-base whitespace-nowrap inline-flex items-center justify-center"
           >
             Book a Consultation
           </Link>
-          <button className="bg-white/20 shadow-2xl text-black px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full backdrop-blur-sm text-sm sm:text-base whitespace-nowrap">
+          <button 
+            onClick={() => {
+              // Try multiple possible service section IDs
+              const servicesElement = document.getElementById('services-section') || 
+                                    document.getElementById('services') ||
+                                    document.querySelector('[id*="service"]') ||
+                                    document.querySelector('.services');
+              
+              if (servicesElement) {
+                servicesElement.scrollIntoView({ 
+                  behavior: 'smooth', 
+                  block: 'start' 
+                });
+              } else {
+                // If no services section found, scroll down to next section
+                window.scrollTo({
+                  top: window.innerHeight,
+                  behavior: 'smooth'
+                });
+              }
+            }}
+            className="bg-white/20 shadow-2xl text-black px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full backdrop-blur-sm text-sm sm:text-base whitespace-nowrap"
+          >
             Explore Services
           </button>
           <div className="absolute -top-[120px] -left-[60px] sm:-top-[150px] sm:-left-[80px] md:-top-[200px] md:-left-[100px]">
