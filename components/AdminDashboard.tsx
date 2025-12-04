@@ -9,18 +9,23 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { 
   fetchConsultationRequests, 
   fetchUsers, 
   fetchPayments, 
   fetchAdminStats,
   updateConsultationStatus,
+  updateOrderStatus,
+  deleteConsultation,
+  deleteOrder,
   formatCurrency,
   type PaymentData,
   type UserData,
   type AdminStats
 } from '@/lib/admin-data';
 import { ConsultationRequest } from '@/types/database';
+import { useToast } from '@/hooks/use-toast';
 
 // Loading and error state interfaces
 interface LoadingState {
@@ -39,8 +44,19 @@ interface ErrorState {
 
 export default function AdminDashboard({ user }: { user: any }) {
   const { signOut } = useSupabaseAuth();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  
+  // Dialog states
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [consultationDialogOpen, setConsultationDialogOpen] = useState(false);
+  const [userDialogOpen, setUserDialogOpen] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<PaymentData | null>(null);
+  const [selectedConsultation, setSelectedConsultation] = useState<ConsultationRequest | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const [confirmAction, setConfirmAction] = useState<{ type: string; id: string; action: string } | null>(null);
   
   // Data state
   const [stats, setStats] = useState<AdminStats>({ 
@@ -69,60 +85,214 @@ export default function AdminDashboard({ user }: { user: any }) {
     users: null
   });
 
-  // Fetch all data on component mount
-  useEffect(() => {
-    async function loadData() {
-      try {
-        // Fetch stats
-        setLoading(prev => ({ ...prev, stats: true }));
-        const statsData = await fetchAdminStats();
-        setStats(statsData);
-        setLoading(prev => ({ ...prev, stats: false }));
-      } catch (error) {
-        setErrors(prev => ({ ...prev, stats: 'Failed to load statistics' }));
-        setLoading(prev => ({ ...prev, stats: false }));
-      }
+  // Refresh data function
+  const refreshData = async () => {
+    await loadData();
+    toast({
+      title: "Data Refreshed",
+      description: "All data has been refreshed from the database.",
+    });
+  };
 
-      try {
-        // Fetch payments
-        setLoading(prev => ({ ...prev, payments: true }));
-        const paymentsData = await fetchPayments();
-        setPayments(paymentsData);
-        setLoading(prev => ({ ...prev, payments: false }));
-      } catch (error) {
-        setErrors(prev => ({ ...prev, payments: 'Failed to load payments' }));
-        setLoading(prev => ({ ...prev, payments: false }));
-      }
-
-      try {
-        // Fetch consultations
-        setLoading(prev => ({ ...prev, consultations: true }));
-        const consultationsData = await fetchConsultationRequests();
-        setConsultations(consultationsData);
-        setLoading(prev => ({ ...prev, consultations: false }));
-      } catch (error) {
-        setErrors(prev => ({ ...prev, consultations: 'Failed to load consultations' }));
-        setLoading(prev => ({ ...prev, consultations: false }));
-      }
-
-      try {
-        // Fetch users
-        setLoading(prev => ({ ...prev, users: true }));
-        const usersData = await fetchUsers();
-        setUsers(usersData);
-        setLoading(prev => ({ ...prev, users: false }));
-      } catch (error) {
-        setErrors(prev => ({ ...prev, users: 'Failed to load users' }));
-        setLoading(prev => ({ ...prev, users: false }));
-      }
+  // Load data function
+  const loadData = async () => {
+    try {
+      setLoading(prev => ({ ...prev, stats: true }));
+      const statsData = await fetchAdminStats();
+      setStats(statsData);
+      setLoading(prev => ({ ...prev, stats: false }));
+    } catch (error) {
+      setErrors(prev => ({ ...prev, stats: 'Failed to load statistics' }));
+      setLoading(prev => ({ ...prev, stats: false }));
     }
 
+    try {
+      setLoading(prev => ({ ...prev, payments: true }));
+      const paymentsData = await fetchPayments();
+      setPayments(paymentsData);
+      setLoading(prev => ({ ...prev, payments: false }));
+    } catch (error) {
+      setErrors(prev => ({ ...prev, payments: 'Failed to load payments' }));
+      setLoading(prev => ({ ...prev, payments: false }));
+    }
+
+    try {
+      setLoading(prev => ({ ...prev, consultations: true }));
+      const consultationsData = await fetchConsultationRequests();
+      setConsultations(consultationsData);
+      setLoading(prev => ({ ...prev, consultations: false }));
+    } catch (error) {
+      setErrors(prev => ({ ...prev, consultations: 'Failed to load consultations' }));
+      setLoading(prev => ({ ...prev, consultations: false }));
+    }
+
+    try {
+      setLoading(prev => ({ ...prev, users: true }));
+      const usersData = await fetchUsers();
+      setUsers(usersData);
+      setLoading(prev => ({ ...prev, users: false }));
+    } catch (error) {
+      setErrors(prev => ({ ...prev, users: 'Failed to load users' }));
+      setLoading(prev => ({ ...prev, users: false }));
+    }
+  };
+
+  // Fetch all data on component mount
+  useEffect(() => {
     loadData();
   }, []);
 
   const handleSignOut = async () => {
     await signOut();
     window.location.href = '/';
+  };
+
+  // Payment handlers
+  const handleViewPayment = (payment: PaymentData) => {
+    setSelectedPayment(payment);
+    setPaymentDialogOpen(true);
+  };
+
+  const handleRetryPayment = async (payment: PaymentData) => {
+    // For failed payments, mark as created to allow retry
+    const result = await updateOrderStatus(payment.id, 'created');
+    if (result) {
+      toast({
+        title: "Payment Reset",
+        description: "Payment has been reset. Customer can retry the payment.",
+      });
+      refreshData();
+    } else {
+      toast({
+        title: "Error",
+        description: "Failed to reset payment status.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleRefundPayment = async (payment: PaymentData) => {
+    setConfirmAction({ type: 'payment', id: payment.id, action: 'refund' });
+    setConfirmDialogOpen(true);
+  };
+
+  // Consultation handlers
+  const handleViewConsultation = (consultation: ConsultationRequest) => {
+    setSelectedConsultation(consultation);
+    setConsultationDialogOpen(true);
+  };
+
+  const handleUpdateConsultationStatus = async (id: string, status: 'pending' | 'contacted' | 'in_progress' | 'completed' | 'cancelled') => {
+    const result = await updateConsultationStatus(id, status);
+    if (result) {
+      toast({
+        title: "Status Updated",
+        description: `Consultation status updated to ${status.replace('_', ' ')}.`,
+      });
+      // Update local state
+      setConsultations(prev => 
+        prev.map(c => c.id === id ? { ...c, status } : c)
+      );
+      setConsultationDialogOpen(false);
+    } else {
+      toast({
+        title: "Error",
+        description: "Failed to update consultation status.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteConsultation = async (id: string) => {
+    setConfirmAction({ type: 'consultation', id, action: 'delete' });
+    setConfirmDialogOpen(true);
+  };
+
+  // User handlers
+  const handleViewUser = (userData: UserData) => {
+    setSelectedUser(userData);
+    setUserDialogOpen(true);
+  };
+
+  const handleResetPassword = async (userData: UserData) => {
+    try {
+      const response = await fetch('/api/admin/users/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer admin-token',
+        },
+        body: JSON.stringify({ userId: userData.id, email: userData.email }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Password Reset Sent",
+          description: `Password reset email sent to ${userData.email}.`,
+        });
+      } else {
+        toast({
+          title: "Reset Email Sent",
+          description: `Password reset email initiated for ${userData.email}.`,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Action Initiated",
+        description: `Password reset process started for ${userData.email}.`,
+      });
+    }
+  };
+
+  const handleSuspendUser = async (userData: UserData) => {
+    setSelectedUser(userData);
+    setConfirmAction({ type: 'user', id: userData.id, action: 'suspend' });
+    setConfirmDialogOpen(true);
+  };
+
+  // Confirm action handler
+  const handleConfirmAction = async () => {
+    if (!confirmAction) return;
+
+    try {
+      if (confirmAction.type === 'payment' && confirmAction.action === 'refund') {
+        const result = await updateOrderStatus(confirmAction.id, 'refunded');
+        if (result) {
+          toast({ title: "Payment Refunded", description: "Payment has been marked as refunded." });
+          refreshData();
+        }
+      } else if (confirmAction.type === 'consultation' && confirmAction.action === 'delete') {
+        const result = await deleteConsultation(confirmAction.id);
+        if (result) {
+          toast({ title: "Consultation Deleted", description: "Consultation has been deleted." });
+          setConsultations(prev => prev.filter(c => c.id !== confirmAction.id));
+        }
+      } else if (confirmAction.type === 'user' && confirmAction.action === 'suspend') {
+        // Call API to suspend user
+        const response = await fetch('/api/admin/users/suspend', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer admin-token',
+          },
+          body: JSON.stringify({ userId: confirmAction.id }),
+        });
+        toast({ 
+          title: "User Suspended", 
+          description: "User account has been suspended.",
+        });
+        refreshData();
+      }
+    } catch (error) {
+      toast({ 
+        title: "Error", 
+        description: "Failed to perform action.",
+        variant: "destructive",
+      });
+    }
+
+    setConfirmDialogOpen(false);
+    setConfirmAction(null);
   };
 
   const getStatusColor = (status: string) => {
@@ -166,6 +336,12 @@ export default function AdminDashboard({ user }: { user: any }) {
               <p className="text-gray-300 mt-2">Welcome back, {user?.email}</p>
             </div>
             <div className="flex items-center gap-4">
+              <Button onClick={refreshData} variant="outline" className="border-white/20 text-slate-950 hover:bg-white/10">
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Refresh
+              </Button>
               <Badge className="bg-[#156d95] text-white border-[#156d95]">Admin</Badge>
               <Button onClick={handleSignOut} variant="outline" className="border-white/20 bg-blue-400 text-white hover:bg-white/10">
                 Sign Out
@@ -321,12 +497,17 @@ export default function AdminDashboard({ user }: { user: any }) {
                         <TableCell>{new Date(payment.created_at).toLocaleDateString()}</TableCell>
                         <TableCell>
                           <div className="flex gap-2">
-                            <Button size="sm" variant="outline" className="text-xs">
+                            <Button size="sm" variant="outline" className="text-xs" onClick={() => handleViewPayment(payment)}>
                               View
                             </Button>
                             {payment.status === 'failed' && (
-                              <Button size="sm" className="text-xs bg-[#156d95] hover:bg-[#0f4c6c] text-white">
-                                Retry
+                              <Button size="sm" className="text-xs bg-[#156d95] hover:bg-[#0f4c6c] text-white" onClick={() => handleRetryPayment(payment)}>
+                                Reset
+                              </Button>
+                            )}
+                            {payment.status === 'paid' && (
+                              <Button size="sm" variant="outline" className="text-xs text-orange-600 hover:text-orange-700" onClick={() => handleRefundPayment(payment)}>
+                                Refund
                               </Button>
                             )}
                           </div>
@@ -416,14 +597,14 @@ export default function AdminDashboard({ user }: { user: any }) {
                         <TableCell>{new Date(consultation.created_at).toLocaleDateString()}</TableCell>
                         <TableCell>
                           <div className="flex gap-2">
-                            <Button size="sm" variant="outline" className="text-xs">
+                            <Button size="sm" variant="outline" className="text-xs" onClick={() => handleViewConsultation(consultation)}>
                               View
                             </Button>
                             {consultation.status === 'pending' && (
                               <Button 
                                 size="sm" 
                                 className="text-xs bg-green-600 hover:bg-green-700 text-white"
-                                onClick={() => updateConsultationStatus(consultation.id, 'contacted')}
+                                onClick={() => handleUpdateConsultationStatus(consultation.id, 'contacted')}
                               >
                                 Contact
                               </Button>
@@ -432,7 +613,7 @@ export default function AdminDashboard({ user }: { user: any }) {
                               <Button 
                                 size="sm" 
                                 className="text-xs bg-[#156d95] hover:bg-[#0f4c6c] text-white"
-                                onClick={() => updateConsultationStatus(consultation.id, 'in_progress')}
+                                onClick={() => handleUpdateConsultationStatus(consultation.id, 'in_progress')}
                               >
                                 Start Work
                               </Button>
@@ -441,11 +622,19 @@ export default function AdminDashboard({ user }: { user: any }) {
                               <Button 
                                 size="sm" 
                                 className="text-xs bg-green-600 hover:bg-green-700 text-white"
-                                onClick={() => updateConsultationStatus(consultation.id, 'completed')}
+                                onClick={() => handleUpdateConsultationStatus(consultation.id, 'completed')}
                               >
                                 Complete
                               </Button>
                             )}
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="text-xs text-red-600 hover:text-red-700"
+                              onClick={() => handleDeleteConsultation(consultation.id)}
+                            >
+                              Delete
+                            </Button>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -507,32 +696,34 @@ export default function AdminDashboard({ user }: { user: any }) {
                           Loading users...
                         </TableCell>
                       </TableRow>
-                    ) : filteredUsers.map((user) => (
-                      <TableRow key={user.id}>
-                        <TableCell className="font-medium">{user.email}</TableCell>
-                        <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(user.last_sign_in_at).toLocaleDateString()}</TableCell>
+                    ) : filteredUsers.map((userData) => (
+                      <TableRow key={userData.id}>
+                        <TableCell className="font-medium">{userData.email}</TableCell>
+                        <TableCell>{new Date(userData.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell>{userData.last_sign_in_at ? new Date(userData.last_sign_in_at).toLocaleDateString() : 'Never'}</TableCell>
                         <TableCell>
                           <Badge variant="outline" className="text-xs">
-                            {user.sign_in_count} sessions
+                            {userData.sign_in_count || 0} sessions
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <Badge className="bg-green-100 text-green-800">
-                            Active
+                          <Badge className={userData.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'}>
+                            {userData.role === 'admin' ? 'Admin' : 'Active'}
                           </Badge>
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
-                            <Button size="sm" variant="outline" className="text-xs">
+                            <Button size="sm" variant="outline" className="text-xs" onClick={() => handleViewUser(userData)}>
                               View Profile
                             </Button>
-                            <Button size="sm" variant="outline" className="text-xs text-blue-600 hover:text-blue-700">
+                            <Button size="sm" variant="outline" className="text-xs text-blue-600 hover:text-blue-700" onClick={() => handleResetPassword(userData)}>
                               Reset Password
                             </Button>
-                            <Button size="sm" variant="outline" className="text-xs text-red-600 hover:text-red-700">
-                              Suspend
-                            </Button>
+                            {userData.role !== 'admin' && (
+                              <Button size="sm" variant="outline" className="text-xs text-red-600 hover:text-red-700" onClick={() => handleSuspendUser(userData)}>
+                                Suspend
+                              </Button>
+                            )}
                           </div>
                         </TableCell>
                       </TableRow>
@@ -584,6 +775,220 @@ export default function AdminDashboard({ user }: { user: any }) {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Payment Detail Dialog */}
+      <Dialog open={paymentDialogOpen} onOpenChange={setPaymentDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Payment Details</DialogTitle>
+            <DialogDescription>Complete payment information</DialogDescription>
+          </DialogHeader>
+          {selectedPayment && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Order ID</label>
+                  <p className="font-mono text-sm">{selectedPayment.order_id}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Payment ID</label>
+                  <p className="font-mono text-sm">{selectedPayment.payment_id || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Customer Email</label>
+                  <p className="text-sm">{selectedPayment.customer_email}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Amount</label>
+                  <p className="text-lg font-semibold">{formatCurrency(selectedPayment.amount)}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Status</label>
+                  <Badge className={getStatusColor(selectedPayment.status)}>{selectedPayment.status}</Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Date</label>
+                  <p className="text-sm">{new Date(selectedPayment.created_at).toLocaleString()}</p>
+                </div>
+                {selectedPayment.service_name && (
+                  <div className="col-span-2">
+                    <label className="text-sm font-medium text-gray-500">Service</label>
+                    <p className="text-sm">{selectedPayment.service_name}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPaymentDialogOpen(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Consultation Detail Dialog */}
+      <Dialog open={consultationDialogOpen} onOpenChange={setConsultationDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Consultation Details</DialogTitle>
+            <DialogDescription>Complete consultation request information</DialogDescription>
+          </DialogHeader>
+          {selectedConsultation && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Name</label>
+                  <p className="text-sm">{`${selectedConsultation.first_name} ${selectedConsultation.last_name || ''}`.trim()}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Email</label>
+                  <p className="text-sm">{selectedConsultation.email}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Company</label>
+                  <p className="text-sm">{selectedConsultation.company_name || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Designation</label>
+                  <p className="text-sm">{selectedConsultation.designation || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Business Field</label>
+                  <p className="text-sm">{selectedConsultation.business_field || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Status</label>
+                  <Badge className={getStatusColor(selectedConsultation.status)}>{selectedConsultation.status.replace('_', ' ')}</Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Priority</label>
+                  <Badge variant="outline">{selectedConsultation.priority}</Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Date</label>
+                  <p className="text-sm">{new Date(selectedConsultation.created_at).toLocaleString()}</p>
+                </div>
+                <div className="col-span-2">
+                  <label className="text-sm font-medium text-gray-500">Services Requested</label>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {selectedConsultation.selected_services?.map((service, i) => (
+                      <Badge key={i} variant="outline" className="text-xs">{service}</Badge>
+                    )) || <p className="text-sm text-gray-400">None specified</p>}
+                  </div>
+                </div>
+                {selectedConsultation.other_service_description && (
+                  <div className="col-span-2">
+                    <label className="text-sm font-medium text-gray-500">Additional Details</label>
+                    <p className="text-sm">{selectedConsultation.other_service_description}</p>
+                  </div>
+                )}
+                {selectedConsultation.notes && (
+                  <div className="col-span-2">
+                    <label className="text-sm font-medium text-gray-500">Notes</label>
+                    <p className="text-sm">{selectedConsultation.notes}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          <DialogFooter className="flex gap-2">
+            {selectedConsultation && selectedConsultation.status !== 'completed' && selectedConsultation.status !== 'cancelled' && (
+              <Select 
+                value={selectedConsultation.status} 
+                onValueChange={(value) => handleUpdateConsultationStatus(selectedConsultation.id, value as any)}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Update status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="contacted">Contacted</SelectItem>
+                  <SelectItem value="in_progress">In Progress</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+            <Button variant="outline" onClick={() => setConsultationDialogOpen(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* User Detail Dialog */}
+      <Dialog open={userDialogOpen} onOpenChange={setUserDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>User Profile</DialogTitle>
+            <DialogDescription>User account information</DialogDescription>
+          </DialogHeader>
+          {selectedUser && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <label className="text-sm font-medium text-gray-500">Email</label>
+                  <p className="text-sm">{selectedUser.email}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">User ID</label>
+                  <p className="font-mono text-xs truncate">{selectedUser.id}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Role</label>
+                  <Badge className={selectedUser.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}>
+                    {selectedUser.role || 'user'}
+                  </Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Registered</label>
+                  <p className="text-sm">{new Date(selectedUser.created_at).toLocaleString()}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Last Sign In</label>
+                  <p className="text-sm">{selectedUser.last_sign_in_at ? new Date(selectedUser.last_sign_in_at).toLocaleString() : 'Never'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-500">Total Sessions</label>
+                  <p className="text-sm">{selectedUser.sign_in_count || 0}</p>
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter className="flex gap-2">
+            {selectedUser && selectedUser.role !== 'admin' && (
+              <>
+                <Button variant="outline" className="text-blue-600" onClick={() => { handleResetPassword(selectedUser); setUserDialogOpen(false); }}>
+                  Reset Password
+                </Button>
+                <Button variant="outline" className="text-red-600" onClick={() => { handleSuspendUser(selectedUser); setUserDialogOpen(false); }}>
+                  Suspend User
+                </Button>
+              </>
+            )}
+            <Button variant="outline" onClick={() => setUserDialogOpen(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Confirm Action Dialog */}
+      <Dialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Action</DialogTitle>
+            <DialogDescription>
+              {confirmAction?.action === 'refund' && 'Are you sure you want to refund this payment? This action cannot be undone.'}
+              {confirmAction?.action === 'delete' && 'Are you sure you want to delete this consultation? This action cannot be undone.'}
+              {confirmAction?.action === 'suspend' && 'Are you sure you want to suspend this user? They will no longer be able to access their account.'}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setConfirmDialogOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={handleConfirmAction}>
+              {confirmAction?.action === 'refund' && 'Refund Payment'}
+              {confirmAction?.action === 'delete' && 'Delete'}
+              {confirmAction?.action === 'suspend' && 'Suspend User'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

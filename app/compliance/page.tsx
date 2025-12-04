@@ -40,7 +40,7 @@ export default function CompliancePage() {
                 <div className="mt-12 p-8 bg-[#F0F9FF] rounded-2xl text-center">
                     <h3 className="text-xl font-semibold mb-4 text-[#202020]">Questions about compliance?</h3>
                     <Link
-                        href="mailto:legal@dpkconsultants.com"
+                        href="mailto:dkpandcompany@gmail.com"
                         className="inline-block bg-[#156d95] text-white px-8 py-3 rounded-full font-medium hover:bg-[#156d95]/90 transition-colors"
                     >
                         Contact Legal Team →

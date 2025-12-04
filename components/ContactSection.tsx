@@ -113,8 +113,8 @@ export const ContactSection = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-semibold text-[#111A4A] mb-1">Email Us</h3>
-                                    <a href="mailto:hello@dpkconsultants.com" className="text-slate-600 hover:text-[#156d95] transition-colors">
-                                        hello@dpkconsultants.com
+                                    <a href="mailto:dkpandcompany@gmail.com" className="text-slate-600 hover:text-[#156d95] transition-colors">
+                                        dkpandcompany@gmail.com
                                     </a>
                                 </div>
                             </div>
@@ -125,8 +125,8 @@ export const ContactSection = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-semibold text-[#111A4A] mb-1">Call Us</h3>
-                                    <a href="tel:+15551234567" className="text-slate-600 hover:text-[#156d95] transition-colors">
-                                        +1 (555) 123-4567
+                                    <a href="tel:+919702101592" className="text-slate-600 hover:text-[#156d95] transition-colors">
+                                        +91 97021 01592
                                     </a>
                                 </div>
                             </div>

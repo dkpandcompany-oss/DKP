@@ -178,8 +178,8 @@ export default function TermsPage() {
                     <h2 className="text-2xl font-semibold mb-4 text-[#156d95]">11. Legal Notices</h2>
                     <p className="text-[#666666]">
                         All legal notices must be sent to:{" "}
-                        <a href="mailto:hello@dpkconsultants.com" className="text-[#156d95] hover:underline">
-                            hello@dpkconsultants.com
+                        <a href="mailto:dkpandcompany@gmail.com" className="text-[#156d95] hover:underline">
+                            dkpandcompany@gmail.com
                         </a>
                     </p>
                 </section>
@@ -189,8 +189,8 @@ export default function TermsPage() {
                     <h2 className="text-2xl font-semibold mb-4 text-[#156d95]">12. Contact</h2>
                     <p className="text-[#666666]">
                         For any questions regarding these Terms, please email{" "}
-                        <a href="mailto:hello@dpkconsultants.com" className="text-[#156d95] hover:underline">
-                            hello@dpkconsultants.com
+                        <a href="mailto:dkpandcompany@gmail.com" className="text-[#156d95] hover:underline">
+                            dkpandcompany@gmail.com
                         </a>
                         .
                     </p>

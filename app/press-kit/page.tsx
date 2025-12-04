@@ -28,7 +28,7 @@ export default function PressKitPage() {
                 <section className="mb-12">
                     <h2 className="text-2xl font-semibold mb-4 text-[#156d95]">Media contact</h2>
                     <p className="text-[#666666]">
-                        <strong>press@dpkconsultants.com</strong> – for interview requests, high‑resolution assets, and story pitches.
+                        <strong>dkpandcompany@gmail.com</strong> – for interview requests, high‑resolution assets, and story pitches.
                     </p>
                 </section>
 

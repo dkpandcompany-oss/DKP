@@ -12,8 +12,52 @@ export interface Database {
         Insert: Omit<ServiceLookup, 'created_at'>
         Update: Partial<Omit<ServiceLookup, 'id' | 'created_at'>>
       }
+      orders: {
+        Row: Order
+        Insert: Omit<Order, 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Omit<Order, 'id' | 'created_at'>>
+      }
     }
   }
+}
+
+export interface Order {
+  id: string
+  created_at: string
+  updated_at: string
+  
+  // Customer Information
+  customer_email: string
+  customer_name?: string
+  
+  // Order Details
+  service_name: string
+  service_id: string
+  addons: OrderAddon[]
+  
+  // Pricing
+  one_time_total: number
+  monthly_total: number
+  amount: number // Total amount in paise
+  currency: string
+  
+  // Razorpay Integration
+  razorpay_order_id: string
+  razorpay_payment_id?: string
+  razorpay_signature?: string
+  
+  // Status
+  status: 'created' | 'attempted' | 'paid' | 'failed' | 'refunded' | 'cancelled'
+  
+  // Metadata
+  notes?: string
+}
+
+export interface OrderAddon {
+  id: string
+  name: string
+  price: number
+  type: 'one_time' | 'monthly' | 'per_day'
 }
 
 export interface ConsultationRequest {

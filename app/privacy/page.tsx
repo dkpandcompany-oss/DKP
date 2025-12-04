@@ -148,7 +148,7 @@ export default function PrivacyPage() {
                         </li>
                         <li>
                             <strong>Complaint</strong>: Raise concerns with the
-                            <a href="mailto:hello@dpkconsultants.com" className="text-[#156d95] ml-1 hover:underline">support email</a>.
+                            <a href="mailto:dkpandcompany@gmail.com" className="text-[#156d95] ml-1 hover:underline">support email</a>.
                         </li>
                     </ul>
                 </section>
@@ -189,8 +189,8 @@ export default function PrivacyPage() {
                     <h2 className="text-2xl font-semibold mb-4 text-[#156d95]">11. Contact Us</h2>
                     <p className="text-[#666666]">
                         For any privacy‑related questions, please email{" "}
-                        <a href="mailto:hello@dpkconsultants.com" className="text-[#156d95] hover:underline">
-                            hello@dpkconsultants.com
+                        <a href="mailto:dkpandcompany@gmail.com" className="text-[#156d95] hover:underline">
+                            dkpandcompany@gmail.com
                         </a>
                         .
                     </p>

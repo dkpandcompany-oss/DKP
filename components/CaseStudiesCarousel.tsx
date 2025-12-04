@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // styles
 import "swiper/css";
@@ -69,7 +70,7 @@ const TestimonialCard = ({ data }: { data: ClientTestimonial }) => {
             src={data.image}
             alt={data.name}
             fill
-            className="object-cover"
+            className="object-contain md:object-cover"
           />
         </div>
 
@@ -96,7 +97,9 @@ const TestimonialCard = ({ data }: { data: ClientTestimonial }) => {
 
 export const CaseStudiesCarousel = () => {
   return (
-    <section className="w-full bg-gradient-to-br from-gray-50 to-blue-50 py-20">
+    <section
+    id="reviews"
+    className="w-full bg-gradient-to-br from-gray-50 to-blue-50 py-20">
       <div className="px-6 md:px-12">
 
         {/* Header */}
@@ -117,6 +120,21 @@ export const CaseStudiesCarousel = () => {
 
         {/* Swiper */}
         <div className="relative w-full">
+          {/* Navigation Arrows */}
+          <button 
+            className="swiper-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-[#156d95] hover:border-[#156d95] transition-all duration-300 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          
+          <button 
+            className="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-[#156d95] hover:border-[#156d95] transition-all duration-300 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={28}
@@ -157,11 +175,23 @@ export const CaseStudiesCarousel = () => {
           border-radius: 50%;
           background: #cdd5e1;
           transition: all 0.3s;
+          margin: 5px;
+          cursor: pointer;
         }
         .swiper-pagination-bullet-active-custom {
           width: 28px;
           border-radius: 6px;
-          background: #2563eb;
+          background: #156d95;
+        }
+        .swiper-pagination-bullet-custom:hover {
+          background: #156d95;
+          transform: scale(1.1);
+        }
+        
+        /* Hide default Swiper navigation arrows */
+        .swiper-button-next,
+        .swiper-button-prev {
+          display: none !important;
         }
       `}</style>
     </section>

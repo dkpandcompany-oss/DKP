@@ -55,7 +55,7 @@ export default function CareersPage() {
                 <section className="mb-12">
                     <h2 className="text-2xl font-semibold mb-4 text-[#156d95]">How to apply</h2>
                     <p className="text-[#666666]">
-                        Send your CV and a brief cover letter to <a href="mailto:careers@dpkconsultants.com" className="text-[#156d95] hover:underline">careers@dpkconsultants.com</a> with the subject line <strong>“DPK – [Role] Application”</strong>.
+                        Send your CV and a brief cover letter to <a href="mailto:dkpandcompany@gmail.com" className="text-[#156d95] hover:underline">dkpandcompany@gmail.com</a> with the subject line <strong>"DPK – [Role] Application"</strong>.
                     </p>
                 </section>
 

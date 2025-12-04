@@ -1,5 +1,5 @@
 import { supabase, supabaseAdmin } from './supabase'
-import { Database } from '@/types/database'
+import { Database, Order } from '@/types/database'
 
 export interface AdminStats {
   totalRevenue: number
@@ -13,8 +13,10 @@ export interface PaymentData {
   order_id: string
   payment_id: string | null
   customer_email: string
+  customer_name?: string
+  service_name?: string
   amount: number
-  status: 'created' | 'attempted' | 'paid' | 'failed' | 'cancelled'
+  status: 'created' | 'attempted' | 'paid' | 'failed' | 'refunded' | 'cancelled'
   created_at: string
   razorpay_order_id?: string
   razorpay_payment_id?: string
@@ -49,15 +51,8 @@ export async function fetchConsultationRequests() {
   }
 }
 
-// Fetch users (requires admin access)
+// Fetch users via API route (requires admin access)
 export async function fetchUsers(): Promise<UserData[]> {
-  // For now, return mock data since the API route needs proper setup
-  // In production, this would use the API route or direct Supabase admin client
-  console.log('Fetching users - using mock data for development')
-  return getMockUsers()
-  
-  /* 
-  // TODO: Uncomment when API route is properly configured
   try {
     const response = await fetch('/api/admin/users', {
       method: 'GET',
@@ -69,101 +64,57 @@ export async function fetchUsers(): Promise<UserData[]> {
 
     if (!response.ok) {
       console.error('Failed to fetch users:', response.statusText)
-      return getMockUsers()
+      return []
     }
 
-    const { users } = await response.json()
-    return users || getMockUsers()
+    const { users, error } = await response.json()
+    
+    if (error) {
+      console.error('Error from API:', error)
+      return []
+    }
+    
+    return users || []
   } catch (error) {
     console.error('Error fetching users:', error)
-    return getMockUsers()
+    return []
   }
-  */
 }
 
-// Mock users data for development/fallback
-function getMockUsers(): UserData[] {
-  return [
-    {
-      id: '1',
-      email: 'john.doe@techcorp.com',
-      created_at: '2024-11-15T10:30:00Z',
-      last_sign_in_at: '2024-12-02T09:15:00Z',
-      sign_in_count: 23,
-      role: 'user'
-    },
-    {
-      id: '2',
-      email: 'sarah.wilson@startup.com',
-      created_at: '2024-11-20T14:22:00Z',
-      last_sign_in_at: '2024-12-01T16:45:00Z',
-      sign_in_count: 15,
-      role: 'user'
-    },
-    {
-      id: '3',
-      email: 'mike.johnson@enterprise.com',
-      created_at: '2024-10-05T08:10:00Z',
-      last_sign_in_at: '2024-12-02T11:30:00Z',
-      sign_in_count: 67,
-      role: 'user'
-    },
-    {
-      id: '4',
-      email: 'lisa.chen@innovate.com',
-      created_at: '2024-11-28T12:15:00Z',
-      last_sign_in_at: '2024-12-02T07:20:00Z',
-      sign_in_count: 8,
-      role: 'user'
-    },
-    {
-      id: '5',
-      email: 'rohitsoneji6@gmail.com',
-      created_at: '2024-09-12T16:40:00Z',
-      last_sign_in_at: '2024-12-02T14:10:00Z',
-      sign_in_count: 134,
-      role: 'admin'
-    }
-  ]
-}
-
-// Mock payment data (since we don't have Razorpay integrated yet)
+// Fetch orders/payments from Supabase
 export async function fetchPayments(): Promise<PaymentData[]> {
-  // For now, return mock data until Razorpay is integrated
-  // In production, this would fetch from your payments table or Razorpay API
-  return [
-    {
-      id: '1',
-      order_id: 'order_DKP001',
-      payment_id: 'pay_DKP001',
-      customer_email: 'john.doe@techcorp.com',
-      amount: 150000, // ₹1,500
-      status: 'paid',
-      created_at: '2024-12-01T10:30:00Z',
-      razorpay_order_id: 'order_DKP001',
-      razorpay_payment_id: 'pay_DKP001'
-    },
-    {
-      id: '2',
-      order_id: 'order_DKP002',
-      payment_id: null,
-      customer_email: 'sarah.wilson@startup.com',
-      amount: 250000, // ₹2,500
-      status: 'failed',
-      created_at: '2024-12-01T14:15:00Z',
-      razorpay_order_id: 'order_DKP002'
-    },
-    {
-      id: '3',
-      order_id: 'order_DKP003',
-      payment_id: null,
-      customer_email: 'mike.johnson@enterprise.com',
-      amount: 500000, // ₹5,000
-      status: 'created',
-      created_at: '2024-12-02T09:00:00Z',
-      razorpay_order_id: 'order_DKP003'
+  try {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching orders:', error)
+      return []
     }
-  ]
+
+    if (!data || data.length === 0) {
+      return []
+    }
+
+    return data.map((order: any) => ({
+      id: order.id,
+      order_id: order.razorpay_order_id || order.id,
+      payment_id: order.razorpay_payment_id || null,
+      customer_email: order.customer_email,
+      customer_name: order.customer_name,
+      service_name: order.service_name,
+      amount: order.amount,
+      status: order.status,
+      created_at: order.created_at,
+      razorpay_order_id: order.razorpay_order_id,
+      razorpay_payment_id: order.razorpay_payment_id,
+    }))
+  } catch (error) {
+    console.error('Error fetching payments:', error)
+    return []
+  }
 }
 
 // Calculate admin statistics
@@ -234,4 +185,71 @@ export function formatCurrency(amount: number): string {
     currency: 'INR',
     minimumFractionDigits: 0
   }).format(amount / 100) // Convert paise to rupees
+}
+
+// Update order status
+export async function updateOrderStatus(
+  id: string,
+  status: 'created' | 'attempted' | 'paid' | 'failed' | 'refunded' | 'cancelled'
+) {
+  try {
+    const { data, error } = await supabase
+      .from('orders')
+      .update({
+        status,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+
+    if (error) {
+      console.error('Error updating order status:', error)
+      return null
+    }
+
+    return data?.[0] || null
+  } catch (error) {
+    console.error('Error updating order status:', error)
+    return null
+  }
+}
+
+// Delete consultation request
+export async function deleteConsultation(id: string) {
+  try {
+    const { error } = await supabase
+      .from('consultation_requests')
+      .delete()
+      .eq('id', id)
+
+    if (error) {
+      console.error('Error deleting consultation:', error)
+      return false
+    }
+
+    return true
+  } catch (error) {
+    console.error('Error deleting consultation:', error)
+    return false
+  }
+}
+
+// Delete order
+export async function deleteOrder(id: string) {
+  try {
+    const { error } = await supabase
+      .from('orders')
+      .delete()
+      .eq('id', id)
+
+    if (error) {
+      console.error('Error deleting order:', error)
+      return false
+    }
+
+    return true
+  } catch (error) {
+    console.error('Error deleting order:', error)
+    return false
+  }
 }

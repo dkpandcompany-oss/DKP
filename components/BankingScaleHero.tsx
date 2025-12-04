@@ -2,54 +2,67 @@
 
 import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Settings, TrendingUp, Users, Globe } from "lucide-react"
 
 
 // @component: BankingScaleHero
 export const BankingScaleHero = () => {
   const services = [
     {
+      icon: Settings,
       title: "Operations & Small Business Optimization",
-      description: "Design efficient workflows, create SOPs, map internal processes, and build scalable operational systems that reduce manual effort and improve team performance.",
+      description: "Streamline workflows, SOPs, and scale your operations.",
+      priceRange: "₹14,999 – ₹24,999",
+      timeline: "2-3 weeks",
       highlights: [
-        "Process documentation & automation",
-        "SOP creation for consistent execution",
-        "Operational bottleneck identification",
-        "Workload distribution & team efficiency planning",
-        "Tools & software recommendations"
+        "Workflow audit",
+        "SOP creation", 
+        "Operational roadmap",
+        "Comprehensive Operational Audit Report",
+        "Tool Stack Recommendations"
       ]
     },
     {
+      icon: TrendingUp,
       title: "Financial Management & Cost Control",
-      description: "Bring financial clarity to your business with structured budgeting, monthly forecasting, expense tracking, and cost-optimization strategies that strengthen profitability.",
+      description: "Improve cash visibility, budgeting and reduce costs.",
+      priceRange: "₹12,999 – ₹22,999",
+      timeline: "2 weeks",
       highlights: [
-        "Budget planning & allocation",
-        "Cash-flow monitoring & reporting",
-        "Financial forecasting & scenario planning",
-        "Cost-cutting recommendations based on data",
-        "Revenue tracking dashboards"
+        "Financial health check",
+        "Cashflow clarity",
+        "Cost reduction plan",
+        "Financial Health Assessment",
+        "Budgeting Templates"
       ]
     },
     {
+      icon: Users,
       title: "Business Development & Strategic Partnerships",
-      description: "Accelerate growth through structured business development, partner research, market expansion strategies, and a well-defined sales pipeline that drives steady revenue.",
+      description: "Find partners and build a repeatable pipeline for growth.",
+      priceRange: "₹19,999 – ₹34,999",
+      timeline: "3-4 weeks",
+      popular: true,
       highlights: [
-        "Market & competitor analysis",
-        "Lead sourcing & partnership outreach",
-        "Sales pipeline setup & CRM structuring",
-        "Revenue opportunity mapping",
-        "Pitch materials & proposal assistance"
+        "Partner mapping",
+        "Pipeline design",
+        "Outreach templates",
+        "Strategic Partner Map",
+        "Partnership Pitch Deck Structure"
       ]
     },
     {
-      title: "Marketing & Web Consulting",
-      description: "Strengthen your digital presence with refined messaging, website strategy, branding guidance, and marketing insights optimized for reach, conversion, and trust.",
+      icon: Globe,
+      title: "Web Development",
+      description: "Get a modern, responsive, high-performance website for your business.",
+      priceRange: "₹24,999 – ₹79,999",
+      timeline: "2-5 weeks",
       highlights: [
-        "Website UI/UX review & recommendations",
-        "SEO suggestions & visibility improvements",
-        "Brand positioning & content strategy",
-        "Social media content direction",
-        "Performance tracking setup (analytics, heatmaps)"
+        "Custom UI/UX design",
+        "Responsive development",
+        "SEO & speed optimized",
+        "Contact/Lead Form Integration",
+        "30-Day Bug Fix Support"
       ]
     }
   ]
@@ -279,40 +292,78 @@ export const BankingScaleHero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.4 }}
+              whileHover={{ 
+                y: -8,
+                scale: 1.02,
+                transition: { duration: 0.3, ease: "easeOut" }
+              }}
               className={`
-                flex flex-col gap-3 
+                flex flex-col 
                 p-6 
                 bg-white 
                 rounded-xl 
                 shadow-sm 
-                hover:shadow-lg 
-                transition-shadow 
+                hover:shadow-2xl 
+                hover:shadow-[#156d95]/10
+                transition-all 
+                duration-300 
+                ease-out
                 relative
-                ${index==1?" border-2 border-r-[#156d95]":""}
+                cursor-pointer
+                group
+                h-full
+                
               `}
             >
-              <h3 className="text-lg font-semibold text-[#111A4A]">
-                {service.title}
-              </h3>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-[#156d95]/10 rounded-lg flex items-center justify-center group-hover:bg-[#156d95] transition-colors duration-300">
+                  <service.icon className="w-5 h-5 text-[#156d95] group-hover:text-white transition-colors duration-300" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-[#111A4A] group-hover:text-[#156d95] transition-colors duration-300">
+                    {service.title}
+                  </h3>
+                  {service.popular && (
+                    <span className="inline-block px-2 py-1 text-xs font-medium bg-[#156d95] text-white rounded-full mt-1">
+                      Popular
+                    </span>
+                  )}
+                </div>
+              </div>
 
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed group-hover:text-slate-700 transition-colors duration-300 mb-4 flex-grow">
                 {service.description}
               </p>
 
-              <div className="mt-2">
-                <h4 className="text-xs font-medium text-[#111A4A] mb-2 opacity-70">
-                  Key Areas:
+              <div className="mb-4">
+                <div className="flex justify-between items-center text-xs text-slate-600 mb-2">
+                  <span className="font-medium">Price Range:</span>
+                  <span className="font-semibold text-[#156d95]">{service.priceRange}</span>
+                </div>
+                <div className="flex justify-between items-center text-xs text-slate-600">
+                  <span className="font-medium">Timeline:</span>
+                  <span className="font-semibold">{service.timeline}</span>
+                </div>
+              </div>
+
+              <div className="mt-auto">
+                <h4 className="text-xs font-medium text-[#111A4A] mb-3 opacity-70 group-hover:opacity-90 transition-opacity duration-300">
+                  Key Deliverables:
                 </h4>
 
-                <ul className="text-xs text-slate-600 space-y-1">
+                <ul className="text-xs text-slate-600 space-y-2">
                   {service.highlights.map((highlight, highlightIndex) => (
-                    <li
+                    <motion.li
                       key={highlightIndex}
-                      className="flex items-start gap-1"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: (index * 0.1) + (highlightIndex * 0.05), duration: 0.3 }}
+                      whileHover={{ x: 4, transition: { duration: 0.2 } }}
+                      className="flex items-start gap-2 group-hover:text-slate-700 transition-colors duration-300"
                     >
-                      <span className="text-[#156d95] mt-1">•</span>
-                      <span>{highlight}</span>
-                    </li>
+                      <span className="text-[#156d95] mt-0.5 group-hover:text-[#156d95] transition-colors duration-300 flex-shrink-0">•</span>
+                      <span className="leading-relaxed">{highlight}</span>
+                    </motion.li>
                   ))}
                 </ul>
               </div>

@@ -114,7 +114,7 @@ export const PortfolioNavbar = () => {
                   transition={{ duration: 0.2, ease: "easeOut" }}
                   onClick={handleHomeClick}
                   aria-label="Home"
-                  className="absolute right-0 flex items-center justify-center w-[46px] h-[46px] bg-white rounded-full border border-slate-200 text-[#156d95] shadow-[0_6px_16px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.10)] hover:-translate-y-[1px] transition-all duration-200 z-10"
+                  className="absolute top-[9vh] right-0 flex items-center justify-center w-[46px] h-[46px] bg-white rounded-full border border-slate-200 text-[#156d95] shadow-[0_6px_16px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.10)] hover:-translate-y-[1px] transition-all duration-200 z-10"
                 >
                   <Home className="w-5 h-5" />
                 </motion.button>
