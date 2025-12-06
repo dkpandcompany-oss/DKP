@@ -81,13 +81,54 @@ export async function POST(request: NextRequest) {
         </div>
       `
 
-      const emailResult = await resend.emails.send({
-        from: 'DKP Consulting <onboarding@resend.dev>',
-        to: ['dkpandcompany@gmail.com'],
-        subject: `New Consultation Request from ${body.firstName} ${body.lastName || ''} (${body.email})`,
+      // Send confirmation email to the customer
+      console.log('Sending customer email to:', body.email)
+      const customerEmailResult = await resend.emails.send({
+        from: 'DKP Consulting <support@dkpandcompany.com>',
+        to: [body.email],
+        subject: 'Thank you for contacting DKP Consulting!',
         html: emailContent,
       })
-      console.log('Email sent successfully to: dkpandcompany@gmail.com', emailResult)
+      console.log('✅ Confirmation email sent successfully to:', body.email)
+      console.log('Customer email response:', customerEmailResult)
+
+      // Send notification email to DKP Consulting
+      console.log('Sending admin notification email to: dkpandcompany@gmail.com')
+      const adminEmailContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
+          <div style="background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h1 style="color: #156d95; margin-bottom: 20px; font-size: 28px;">New Consultation Request</h1>
+            
+            <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+              You have received a new consultation request:
+            </p>
+
+            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="color: #111A4A; margin-bottom: 15px;">Contact Details:</h3>
+              <p style="margin: 8px 0;"><strong>Name:</strong> ${body.firstName} ${body.lastName || ''}</p>
+              <p style="margin: 8px 0;"><strong>Email:</strong> ${body.email}</p>
+              ${body.companyName ? `<p style="margin: 8px 0;"><strong>Company:</strong> ${body.companyName}</p>` : ''}
+              ${body.designation ? `<p style="margin: 8px 0;"><strong>Designation:</strong> ${body.designation}</p>` : ''}
+              ${body.businessField ? `<p style="margin: 8px 0;"><strong>Business Field:</strong> ${body.businessField}</p>` : ''}
+              <p style="margin: 8px 0;"><strong>Services Requested:</strong> ${selectedServicesText}</p>
+              ${body.otherServiceDescription ? `<p style="margin: 8px 0;"><strong>Other Service Description:</strong> ${body.otherServiceDescription}</p>` : ''}
+            </div>
+            
+            <p style="font-size: 16px; line-height: 1.6;">
+              Please respond to this request within 24 hours.
+            </p>
+          </div>
+        </div>
+      `
+
+      const adminEmailResult = await resend.emails.send({
+        from: 'DKP Consulting <support@dkpandcompany.com>',
+        to: ['dkpandcompany@gmail.com'],
+        subject: `New Consultation Request from ${body.firstName} ${body.lastName || ''}`,
+        html: adminEmailContent,
+      })
+      console.log('✅ Notification email sent successfully to: dkpandcompany@gmail.com')
+      console.log('Admin email response:', adminEmailResult)
 
     } catch (emailError) {
       console.error('Failed to send email notification:', emailError)
