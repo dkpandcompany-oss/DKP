@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ProductTeaserCard } from "@/components/ProductTeaserCard"
 import { BankingScaleHero } from "@/components/BankingScaleHero"
@@ -16,6 +16,7 @@ import { isAdminEmail } from "@/lib/admin"
 
 export default function Page() {
   const { user, loading } = useSupabaseAuth()
+  const [isOpen,setIsOpen]=useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -39,8 +40,8 @@ export default function Page() {
   return (
     <>
       {/* <ProductTeaserCard /> */}
-      <Hero/>
-      <BankingScaleHero />
+      <Hero isOpen={isOpen} setIsOpen={setIsOpen} />
+      <BankingScaleHero isOpen={isOpen} setIsOpen={setIsOpen} />
       <WhoWeServeSection />
       <OurProcess />
       <CaseStudiesCarousel />

@@ -77,15 +77,12 @@ export default function BillingSummary({
             <Separator />
             <div className="space-y-2">
               <h4 className="font-medium text-sm text-muted-foreground">
-                One-time Add-ons
+                Selected Add-ons
               </h4>
               {oneTimeAddons.map((addon) => (
                 <div key={addon.id} className="flex justify-between items-start">
                   <div className="flex-1">
                     <p className="text-sm">{addon.name}</p>
-                    <Badge className={getTypeColor(addon.type)}>
-                      {getTypeLabel(addon.type)}
-                    </Badge>
                 </div>
                 <p className="text-sm font-medium">{formatCurrency(addon.price)}</p>
                 </div>
@@ -94,23 +91,25 @@ export default function BillingSummary({
           </>
         )}
 
-        {/* Monthly Add-ons */}
+        {/* Monthly Add-ons - now paid upfront */}
         {monthlyAddons.length > 0 && (
           <>
-            <Separator />
+            {oneTimeAddons.length === 0 && <Separator />}
             <div className="space-y-2">
-              <h4 className="font-medium text-sm text-muted-foreground">
-                Monthly Add-ons
-              </h4>
+              {oneTimeAddons.length === 0 && (
+                <h4 className="font-medium text-sm text-muted-foreground">
+                  Selected Add-ons
+                </h4>
+              )}
               {monthlyAddons.map((addon) => (
                 <div key={addon.id} className="flex justify-between items-start">
                   <div className="flex-1">
-                  <p className="text-sm">{addon.name}</p>
-                  <Badge className={getTypeColor(addon.type)}>
-                    {getTypeLabel(addon.type)}
-                  </Badge>
+                    <p className="text-sm">{addon.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      (Originally {formatCurrency(addon.price)}/month)
+                    </p>
                 </div>
-                <p className="text-sm font-medium">{formatCurrency(addon.price)}/mo</p>
+                <p className="text-sm font-medium">{formatCurrency(addon.price)}</p>
                 </div>
               ))}
             </div>
@@ -121,21 +120,10 @@ export default function BillingSummary({
 
         {/* Totals */}
         <div className="space-y-3">
-          {totals.one_time_total > 0 && (
-            <div className="flex justify-between items-center">
-              <span className="font-medium">One-time Total:</span>
-              <span className="text-lg font-bold">{formatCurrency(totals.one_time_total)}</span>
-            </div>
-          )}
-          
-          {totals.monthly_total > 0 && (
-            <div className="flex justify-between items-center">
-              <span className="font-medium">Monthly Total:</span>
-              <span className="text-lg font-bold text-green-600">
-                {formatCurrency(totals.monthly_total)}/mo
-              </span>
-            </div>
-          )}
+          <div className="flex justify-between items-center">
+            <span className="font-medium">Total Amount:</span>
+            <span className="text-2xl font-bold text-[#156d95]">{formatCurrency(totals.one_time_total)}</span>
+          </div>
         </div>
 
         <Separator />
@@ -144,16 +132,12 @@ export default function BillingSummary({
         <div className="space-y-3 text-sm text-muted-foreground">
           <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
             <p className="text-blue-800 font-medium mb-1">Payment Details:</p>
-            {totals.one_time_total > 0 && (
-              <p className="text-blue-700">
-                • One-time payment of {formatCurrency(totals.one_time_total)} will be charged now
-              </p>
-            )}
-            {totals.monthly_total > 0 && (
-              <p className="text-blue-700">
-                • Monthly subscription of {formatCurrency(totals.monthly_total)} will be set up separately
-              </p>
-            )}
+            <p className="text-blue-700">
+              • Full payment of {formatCurrency(totals.one_time_total)} will be charged now
+            </p>
+            <p className="text-blue-700 text-xs mt-1">
+              • Includes all services and add-ons (one-time payment)
+            </p>
           </div>
         </div>
 

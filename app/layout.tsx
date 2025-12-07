@@ -40,8 +40,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${figtree.variable} ${geistMono.variable} antialiased`}>
-        <LayoutContent>{children}</LayoutContent>
+        <div className="pb-10">
+          <LayoutContent>{children}</LayoutContent>
         <Analytics />
+        </div>
       </body>
     </html>
   )

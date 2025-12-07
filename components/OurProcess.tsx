@@ -2,29 +2,34 @@
 
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
+import Link from "next/link"
 
 const steps = [
     {
         number: "01",
         title: "Discover & Analyze",
+        slug: "discover-analyze",
         description:
             "We begin by understanding your business—how you operate, manage finances, generate growth, and present yourself online.",
     },
     {
         number: "02",
         title: "Build a Clear Strategy",
+        slug: "build-strategy",
         description:
             "Based on our findings, we create a simple, structured roadmap that outlines what needs to improve and how to get there effectively.",
     },
     {
         number: "03",
         title: "Implement Improvements",
+        slug: "implement-improvements",
         description:
             "We assist you in executing the plan—optimizing workflows, improving cost control, strengthening BD efforts, and enhancing your digital presence.",
     },
     {
         number: "04",
         title: "Monitor & Refine",
+        slug: "monitor-refine",
         description:
             "Once implemented, we review performance, measure results, and fine-tune strategies to ensure long-term stability and growth.",
     },
@@ -114,9 +119,15 @@ export const OurProcess = () => {
                             </p>
 
                             <div className="pt-2">
-                                <span className="text-sm font-medium text-[#156d95] group-hover:underline cursor-pointer">
+                                <Link 
+                                    href={`/process/${step.slug}`}
+                                    className="text-sm font-medium text-[#156d95] group-hover:underline cursor-pointer inline-flex items-center gap-1"
+                                >
                                     Learn more
-                                </span>
+                                    <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </Link>
                             </div>
                         </motion.article>
                     ))}

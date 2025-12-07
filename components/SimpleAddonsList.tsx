@@ -80,15 +80,21 @@ export default function SimpleAddonsList({
           const isSelected = isAddonSelected(addon.id);
 
           return (
-            <div key={addon.id} className={`p-4 border rounded-lg transition-colors ${
-              isSelected ? 'border-blue-200 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-            }`}>
+            <div 
+              key={addon.id} 
+              className={`p-4 border rounded-lg transition-all cursor-pointer ${
+                isSelected 
+                  ? 'border-blue-500 bg-blue-50 shadow-md' 
+                  : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50 hover:shadow-sm'
+              }`}
+              onClick={() => handleAddonToggle(addon, !isSelected)}
+            >
               <div className="flex items-start space-x-3">
                 <Checkbox
                   id={`addon-${addon.id}`}
                   checked={isSelected}
                   onCheckedChange={(checked) => handleAddonToggle(addon, checked as boolean)}
-                  className="mt-1"
+                  className="mt-1 pointer-events-none"
                 />
                 <div className="flex-1 space-y-2">
                   <div className="flex items-center justify-between">

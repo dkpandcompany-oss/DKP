@@ -4,9 +4,13 @@ import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { ArrowRight, Settings, TrendingUp, Users, Globe } from "lucide-react"
 
+interface BankingScaleHeroProps {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+}
 
 // @component: BankingScaleHero
-export const BankingScaleHero = () => {
+export const BankingScaleHero = ({ isOpen, setIsOpen }: BankingScaleHeroProps) => {
   const services = [
     {
       icon: Settings,
@@ -75,14 +79,16 @@ export const BankingScaleHero = () => {
   ]
 
   const [typingComplete, setTypingComplete] = useState(false)
-  const [showServicesDropdown, setShowServicesDropdown] = useState(false)
+  const [displayedText, setDisplayedText] = useState("")
+  const [isDeleting, setIsDeleting] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const fullText = "Strategic Consulting"
 
   useEffect(() => {
-    if (showServicesDropdown && dropdownRef.current) {
+    if (isOpen && dropdownRef.current) {
       dropdownRef.current.focus()
     }
-  }, [showServicesDropdown])
+  }, [isOpen])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -92,17 +98,17 @@ export const BankingScaleHero = () => {
         dropdownRef.current &&
         !dropdownRef.current.contains(target)
       ) {
-        setShowServicesDropdown(false)
+        setIsOpen(false)
       }
     }
 
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setShowServicesDropdown(false)
+        setIsOpen(false)
       }
     }
 
-    if (showServicesDropdown) {
+    if (isOpen) {
       document.addEventListener("click", handleClickOutside)
       document.addEventListener("keydown", handleEscKey)
     }
@@ -111,12 +117,41 @@ export const BankingScaleHero = () => {
       document.removeEventListener("click", handleClickOutside)
       document.removeEventListener("keydown", handleEscKey)
     }
-  }, [showServicesDropdown])
+  }, [isOpen, setIsOpen])
 
+  // Continuous typing effect (type and delete)
   useEffect(() => {
-    const timer = setTimeout(() => setTypingComplete(true), 1000)
-    return () => clearTimeout(timer)
-  }, [])
+    const typingSpeed = 100
+    const deletingSpeed = 50
+    const pauseAfterTyping = 2000
+    const pauseAfterDeleting = 500
+
+    let timeout: NodeJS.Timeout
+
+    if (!isDeleting && displayedText.length < fullText.length) {
+      // Typing
+      timeout = setTimeout(() => {
+        setDisplayedText(fullText.slice(0, displayedText.length + 1))
+      }, typingSpeed)
+    } else if (!isDeleting && displayedText.length === fullText.length) {
+      // Pause after typing complete
+      timeout = setTimeout(() => {
+        setIsDeleting(true)
+      }, pauseAfterTyping)
+    } else if (isDeleting && displayedText.length > 0) {
+      // Deleting
+      timeout = setTimeout(() => {
+        setDisplayedText(fullText.slice(0, displayedText.length - 1))
+      }, deletingSpeed)
+    } else if (isDeleting && displayedText.length === 0) {
+      // Pause after deleting complete
+      timeout = setTimeout(() => {
+        setIsDeleting(false)
+      }, pauseAfterDeleting)
+    }
+
+    return () => clearTimeout(timeout)
+  }, [displayedText, isDeleting, fullText])
 
 
 
@@ -140,46 +175,28 @@ export const BankingScaleHero = () => {
         <div className="grid grid-cols-12 gap-5 gap-y-16">
           <div className="col-span-12 md:col-span-6 relative z-10">
             <div
-              className="relative h-6 inline-flex items-center font-mono uppercase text-xs text-[#167E6C] mb-12 px-2"
+              className="relative h-6 inline-flex items-center font-mono uppercase text-xs text-[#146e96] mb-12 px-2"
               style={{
                 fontFamily: "var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace",
               }}
             >
-              <div className="flex items-center gap-0.5 overflow-hidden">
+              <div className="flex items-center gap-0.5">
+                <span className="text-[#146e96]">
+                  {displayedText}
+                </span>
                 <motion.span
                   initial={{
-                    width: 0,
+                    opacity: 1,
                   }}
                   animate={{
-                    width: "auto",
+                    opacity: [1, 0, 1, 0],
                   }}
                   transition={{
                     duration: 0.8,
-                    ease: "easeOut",
-                  }}
-                  className="block whitespace-nowrap overflow-hidden text-[#167E6C] relative z-10"
-                  style={{
-                    color: "#146e96",
-                  }}
-                >
-                  Strategic Consulting
-                </motion.span>
-                <motion.span
-                  initial={{
-                    opacity: 0,
-                  }}
-                  animate={{
-                    opacity: typingComplete ? [1, 0, 1, 0] : 0,
-                  }}
-                  transition={{
-                    duration: 1,
-                    repeat: Number.POSITIVE_INFINITY,
+                    repeat: Infinity,
                     ease: "linear",
                   }}
-                  className="block w-1.5 h-3 bg-[#167E6C] ml-0.5 relative z-10 rounded-sm"
-                  style={{
-                    color: "#146e96",
-                  }}
+                  className="block w-1.5 h-3 bg-[#146e96] ml-0.5 rounded-sm"
                 />
               </div>
             </div>
@@ -217,28 +234,27 @@ export const BankingScaleHero = () => {
             <div className="relative inline-block">
               <button
                 onClick={() => {
-                  setShowServicesDropdown(!showServicesDropdown)
-                  if (!showServicesDropdown) {
-                    // Scroll to services section after animation completes
+                  setIsOpen(!isOpen);
+                  if (!isOpen) {
                     setTimeout(() => {
-                      const servicesElement = document.getElementById('services-section')
+                      const servicesElement = document.getElementById('services-section');
                       if (servicesElement) {
                         servicesElement.scrollIntoView({ 
                           behavior: 'smooth', 
                           block: 'start' 
-                        })
+                        });
                       }
-                    }, 350)
+                    }, 350);
                   }
                 }}
-                aria-expanded={showServicesDropdown}
+                aria-expanded={isOpen}
                 aria-controls="services-dropdown"
                 className="relative inline-flex justify-center items-center leading-4 text-center cursor-pointer whitespace-nowrap outline-none font-medium h-9 text-[#232730] bg-white/50 backdrop-blur-sm shadow-[0_1px_1px_0_rgba(255,255,255,0),0_0_0_1px_rgba(87,90,100,0.12)] transition-all duration-200 ease-in-out rounded-lg px-4 mt-5 text-sm group hover:shadow-[0_1px_2px_0_rgba(0,0,0,0.05),0_0_0_1px_rgba(87,90,100,0.18)]"
               >
                 <span className="relative z-10 flex items-center gap-1">
                   Explore Our Services
                   <ArrowRight
-                    className={`w-4 h-4 -mr-1 transition-transform duration-200 ${showServicesDropdown ? "rotate-90" : "group-hover:translate-x-1"}`}
+                    className={`w-4 h-4 -mr-1 transition-transform duration-200 ${isOpen ? "rotate-90" : "group-hover:translate-x-1"}`}
                   />
                 </span>
               </button>
@@ -261,7 +277,7 @@ export const BankingScaleHero = () => {
           </div>
 
 <AnimatePresence>
-  {showServicesDropdown && (
+  {isOpen && (
     <motion.div
       id="services-section"
       initial={{ opacity: 0, height: 0, marginTop: 0 }}

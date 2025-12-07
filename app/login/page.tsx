@@ -51,24 +51,25 @@ export default function LoginMinimal() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-sky-300 to-sky-100 p-4 relative">
+    <div className="min-h-screen flex items-center md:justify-end md:pr-[20%] bg-white p-4 relative">
       {/* Background Image */}
       <div 
-        className="absolute top-0 left-0 right-0 w-full bg-cover bg-center bg-no-repeat"
-        
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat "
+        style={{ backgroundImage: "url('/LoginBack.png')" }}
+        aria-hidden="true"
       />
 
       {/* Login Card */}
       <div className="
         w-full max-w-sm
-        bg-white/30 backdrop-blur-xl
+        bg-white backdrop-blur-xl
         rounded-3xl p-8
-        shadow-xl border border-white/40
+        shadow-2xl border border-[#0000000d]
         relative z-10
       ">
 
         {/* Title */}
-        <h1 className="text-center text-2xl font-bold text-gray-800 mb-8">
+        <h1 className="text-center text-2xl font-bold text-gray-800 mb-12">
           Login
         </h1>
 
@@ -117,10 +118,10 @@ export default function LoginMinimal() {
             type="submit"
             disabled={loading}
             className="
-              w-full py-3 rounded-xl
+              w-full py-4 rounded-xl
               bg-gradient-to-b from-sky-900 to-sky-800
-              text-white font-medium
-              shadow-md hover:opacity-90 transition
+              text-white font-semibold text-lg
+              shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all
               disabled:opacity-50 disabled:cursor-not-allowed
             "
           >
@@ -129,7 +130,7 @@ export default function LoginMinimal() {
         </form>
 
         {/* Divider */}
-        <div className="flex items-center gap-3 my-6">
+        <div className="flex items-center gap-3 my-8">
           <div className="flex-1 h-px bg-white/30"></div>
           <span className="text-gray-600 text-sm">or</span>
           <div className="flex-1 h-px bg-white/30"></div>

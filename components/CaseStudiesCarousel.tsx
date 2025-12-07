@@ -22,22 +22,32 @@ type ClientTestimonial = {
 };
 
 const testimonials: ClientTestimonial[] = [
+    {
+    id: 6,
+    name: "David Park",
+    title: "Managing Director",
+    company: "Venture Capital Partners",
+    image: "/person1.png",
+    quote:
+      "We recommend DKP to all our portfolio companies. Their strategic planning consistently delivers measurable results.",
+    highlight: "PROVEN TRACK RECORD.",
+  },
   {
     id: 1,
     name: "Sarah Chen",
     title: "CEO",
     company: "TechFlow Solutions",
-    image: "/heroPage/women.png",
+    image: "/person6.png",
     quote:
       "DKP transformed our operational chaos into streamlined processes. Revenue efficiency improved by 40% within 3 months.",
-    highlight: "KEEP TRACK OF THE HOTTEST OPERATIONS.",
+    highlight: "KEEP TRACK OF THE HOTTEST .",
   },
   {
     id: 2,
-    name: "Michael Rodriguez",
+    name: "Emily Rodriguez",
     title: "Founder",
     company: "GrowthLab",
-    image: "/heroPage/women.png",
+    image: "/person2.png",
     quote:
       "Their financial planning expertise helped us raise Series A. Clear forecasting made all the difference with investors.",
     highlight: "NO EXTRA CHARGES. LESS ROYALTIES.",
@@ -47,11 +57,32 @@ const testimonials: ClientTestimonial[] = [
     name: "Priya Sharma",
     title: "COO",
     company: "InnovateNow",
-    image: "/heroPage/women.png",
+    image: "/person3.png",
     quote:
       "From startup chaos to enterprise-ready operations. DKP's guidance was invaluable during our scaling phase.",
     highlight: "DIGITAL-FIRST APPROACH.",
   },
+  {
+    id: 4,
+    name: "Michael Thompson",
+    title: "CFO",
+    company: "FinanceHub",
+    image: "/person4.png",
+    quote:
+      "DKP's financial systems revolutionized our accounting processes. We saved 30 hours per month on reporting alone.",
+    highlight: "STREAMLINED FINANCIAL WORKFLOWS.",
+  },
+  {
+    id: 5,
+    name: "Jessica Martinez",
+    title: "VP Operations",
+    company: "CloudScale Inc",
+    image: "/person5.png",
+    quote:
+      "The operational frameworks they implemented scaled perfectly with our growth from 10 to 100 employees.",
+    highlight: "SCALABLE SOLUTIONS.",
+  },
+
 ];
 
 const TestimonialCard = ({ data }: { data: ClientTestimonial }) => {
@@ -80,9 +111,9 @@ const TestimonialCard = ({ data }: { data: ClientTestimonial }) => {
             “{data.quote}”
           </blockquote>
 
-          <span className="inline-block bg--100 text-gray-300 text-xs font-semibold px-4 py-2 rounded-full mb-6">
+            <span className="inline-block  text-gray-600 text-xs font-semibold px-4 py-2 rounded-full mb-6 line-clamp-1">
             {data.highlight}
-          </span>
+            </span>
 
           <div>
             <h4 className="font-bold text-gray-900 text-lg">{data.name}</h4>

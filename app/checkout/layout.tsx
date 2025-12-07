@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { LayoutContent } from '@/components/LayoutContent';
 
 export const metadata: Metadata = {
   title: 'Checkout | DKP & Company',
@@ -10,5 +11,5 @@ export default function CheckoutLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <LayoutContent>{children}</LayoutContent>;
 }

@@ -4,6 +4,11 @@ import React from "react";
 import Link from "next/link";
 import { TrendingUp, Wallet, Smartphone } from "lucide-react";
 
+interface HeroProps {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+}
+
 const services = [
   {
     id: 1,
@@ -17,7 +22,7 @@ const services = [
     icon: Wallet,
     title: "₹1.2L",
     subtitle: "Saved with cost control",
-    position: "top-[20%] right-[2%] md:top-[25%] md:-right-[10%]",
+    position: "top-[20%]  right-[2%] md:top-[25%] md:-right-[10%]",
   },
   {
     id: 3,
@@ -28,7 +33,7 @@ const services = [
   },
 ];
 
-const Hero = () => {
+const Hero = ({ isOpen, setIsOpen }: HeroProps) => {
   return (
     <div className="h-screen bg-[#ececec]  w-full relative overflow-hidden">
       <div className="absolute left-1/2 top-10 transform -translate-x-1/2 w-full px-4 sm:px-0">
@@ -80,7 +85,7 @@ const Hero = () => {
         />
       </div>
       <div className="absolute   -bottom-[6%] left-1/2 transform -translate-x-1/2 w-full md:w-[560px] lg:w-[850px]">
-        <div className="relative w-full h-[78vh]">
+        <div className="relative w-full h-[78vh] z-10">
           <Image
             src="/heroPage/women.svg"
             alt="hero women"
@@ -91,63 +96,60 @@ const Hero = () => {
         </div>
 
         {/* Service Cards */}
-        {services.map((service) => {
-          const IconComponent = service.icon;
-          return (
-            <div
-              key={service.id}
-              className={`absolute ${service.position} z-20`}
-            >
-              <div className="bg-white/30 backdrop-blur-3xl border border-gray-200 rounded-xl md:rounded-2xl p-2 md:p-4 shadow-lg min-w-[10vw] md:min-w-[200px]">
-                <div className="flex items-start gap-2 md:gap-3">
-                  <div className="bg-[#156d95]/10 p-1.5 md:p-2 rounded-lg">
-                    <IconComponent className="w-4 h-4 md:w-5 md:h-5 text-[#156d95]" />
-                  </div>
-                  <div>
-                    <h3 className="font-extrabold font-[var(--font-inter)] text-sm md:text-3xl text-gray-900">
-                      {service.title}
-                    </h3>
-                    <p className="text-xs md:text-sm text-gray-600">
-                      {service.subtitle}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+       {services.map((service) => {
+  const IconComponent = service.icon;
+  return (
+    <div
+      key={service.id}
+      className={`absolute ${service.position} 
+        ${service.id === 2 ? "z-0 md:z-20" : "z-20"}`}
+    >
+      <div className="bg-white/30 backdrop-blur-3xl border border-gray-200 rounded-xl md:rounded-2xl p-2 md:p-4 shadow-lg min-w-[10vw] md:min-w-[200px]">
+        <div className="flex items-start gap-2 md:gap-3">
+          <div className="bg-[#156d95]/10 p-1.5 md:p-2 rounded-lg">
+            <IconComponent className="w-4 h-4 md:w-5 md:h-5 text-[#156d95]" />
+          </div>
+          <div>
+            <h3 className="font-extrabold font-[var(--font-inter)] text-sm md:text-3xl text-gray-900">
+              {service.title}
+            </h3>
+            <p className="text-xs md:text-sm text-gray-600">
+              {service.subtitle}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+})}
+
+      
       </div>
 
       <div className="absolute left-1/2 bottom-5 sm:bottom-6 md:bottom-10 transform -translate-x-1/2 w-[80%] sm:w-full max-w-xl px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 bg-white/70 backdrop-blur-md border border-white/20 rounded-2xl sm:rounded-3xl shadow-2xl z-30">
           <div className="flex relative flex-row justify-center gap-2 sm:gap-3">
           <Link
             href="/contact"
-            className="bg-[#156d95] text-white px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full text-sm sm:text-base whitespace-nowrap inline-flex items-center justify-center"
+            className="bg-[#156d95] hover:bg-[#115372] hover:scale-105 transition-all duration-100 ease-out text-white px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full text-sm sm:text-base whitespace-nowrap inline-flex items-center justify-center"
           >
             Book a Consultation
           </Link>
           <button 
             onClick={() => {
-              // Try multiple possible service section IDs
-              const servicesElement = document.getElementById('services-section') || 
-                                    document.getElementById('services') ||
-                                    document.querySelector('[id*="service"]') ||
-                                    document.querySelector('.services');
-              
-              if (servicesElement) {
-                servicesElement.scrollIntoView({ 
-                  behavior: 'smooth', 
-                  block: 'start' 
-                });
-              } else {
-                // If no services section found, scroll down to next section
-                window.scrollTo({
-                  top: window.innerHeight,
-                  behavior: 'smooth'
-                });
+              setIsOpen(!isOpen);
+              if (!isOpen) {
+                setTimeout(() => {
+                  const servicesElement = document.getElementById('services-section');
+                  if (servicesElement) {
+                    servicesElement.scrollIntoView({ 
+                      behavior: 'smooth', 
+                      block: 'start' 
+                    });
+                  }
+                }, 350);
               }
             }}
-            className="bg-white/20 shadow-2xl text-black px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full backdrop-blur-sm text-sm sm:text-base whitespace-nowrap"
+            className="bg-white/20 shadow-2xl hover:scale-105 transition-all duration-100 hover:bg-white/70  text-black px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full backdrop-blur-sm text-sm sm:text-base whitespace-nowrap"
           >
             Explore Services
           </button>

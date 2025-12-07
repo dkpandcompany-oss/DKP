@@ -9,9 +9,11 @@ export function calculateTotals(
 
   selectedAddons.forEach(addon => {
     if (addon.selected) {
-      if (addon.type === 'one_time' || addon.type === 'per_day') {
-        one_time_total += addon.price;
-      } else if (addon.type === 'monthly') {
+      // Add all addon prices to one-time total (no future payments)
+      one_time_total += addon.price;
+      
+      // Keep monthly_total for display purposes only
+      if (addon.type === 'monthly') {
         monthly_total += addon.price;
       }
     }
