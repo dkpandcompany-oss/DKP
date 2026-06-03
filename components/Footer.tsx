@@ -50,7 +50,7 @@ export const Footer = () => {
               <p className="text-sm uppercase tracking-wide text-gray-500">
                 Name
               </p>
-              <p className="text-lg font-medium text-black">Krishna Soumani</p>
+              <p className="text-lg font-medium text-black">Krishna Somani</p>
             </div>
             <div>
               <p className="text-sm uppercase tracking-wide text-gray-500">
@@ -61,6 +61,17 @@ export const Footer = () => {
                 className="text-lg font-medium text-black hover:underline"
               >
                 74002 33022
+              </a>
+            </div>
+             <div>
+              <p className="text-sm uppercase tracking-wide text-gray-500">
+                Email id 
+              </p>
+              <a
+               href="mailto:coo.dkpand@gmail.com"
+                className="text-lg font-medium text-black hover:underline"
+              >
+                coo.dkpand@company@gmail.com
               </a>
             </div>
           </div>
