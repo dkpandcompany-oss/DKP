@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiUser } from "react-icons/fi";
@@ -62,145 +63,140 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-sky-300 to-sky-100 p-4 relative">
-      {/* Background Image */}
-      <div 
-        className="absolute top-0 left-0 right-0 w-full bg-cover bg-center bg-no-repeat"
-      />
+    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-white">
+      {/* Back Button */}
+      <Link
+        href="/"
+        className="absolute top-6 left-6 z-20 flex items-center gap-2 text-gray-700 hover:text-sky-800 bg-white/80 rounded-full px-4 py-2 shadow-md border border-gray-200"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Back to Home
+      </Link>
 
-      {/* Signup Card */}
-      <div className="
-        w-full max-w-sm
-        bg-white/30 backdrop-blur-xl
-        rounded-3xl p-8
-        shadow-xl border border-white/40
-        relative z-10
-      ">
+      {/* LEFT IMAGE SECTION */}
+      <div
+        className="hidden md:flex relative bg-cover bg-center items-center justify-center"
+        style={{ backgroundImage: "url('/Login.png')" }}
+      >
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/30" />
 
-        {/* Title */}
-        <h1 className="text-center text-2xl font-bold text-gray-800 mb-8">
-          Create Account
-        </h1>
-
-        {/* Full Name Field */}
-        <div className="mb-4">
-          <div className="flex items-center gap-3 bg-white/40 border border-white/60 rounded-xl px-4 py-3">
-            <FiUser className="h-5 w-5 text-gray-600" />
-            <input
-              type="text"
-              placeholder="Full Name"
-              className="w-full bg-transparent focus:outline-none placeholder-gray-600 text-gray-800"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-            />
+        {/* Centered Text */}
+        <div className="relative z-10 flex flex-col justify-center items-center w-full h-full px-8">
+          <div className="max-w-lg w-full text-center  flex flex-col justify-center items-start md:items-start">
+            <h1 className="text-[4rem] font-bold leading-tight mb-6 text-white">
+              Helping Businesses <br /> Make Smarter Decisions
+            </h1>
+            <p className="text-lg opacity-90 text-white">
+              Strategy • Operations • Growth Consulting
+            </p>
           </div>
         </div>
+      </div>
 
-        {/* Email Field */}
-        <div className="mb-4">
-          <div className="flex items-center gap-3 bg-white/40 border border-white/60 rounded-xl px-4 py-3">
-            <FiMail className="h-5 w-5 text-gray-600" />
-            <input
-              type="email"
-              placeholder="Email Address"
-              className="w-full bg-transparent focus:outline-none placeholder-gray-600 text-gray-800"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+      {/* RIGHT SIGNUP PANEL */}
+      <div className="flex items-center justify-center px-6">
+        <div className="w-full max-w-sm">
+
+          <h2 className="text-2xl font-semibold text-gray-900 text-center mb-10">
+            Create Account
+          </h2>
+
+          {/* Full Name */}
+          <div className="mb-4">
+            <div className="flex items-center gap-3 border border-gray-300 rounded-xl px-4 py-3">
+              <FiUser className="text-gray-500" />
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="w-full outline-none text-gray-800"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Password Field */}
-        <div className="mb-6">
-          <div className="flex items-center gap-3 bg-white/40 border border-white/60 rounded-xl px-4 py-3">
-            <FiLock className="h-5 w-5 text-gray-600" />
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              className="w-full bg-transparent focus:outline-none placeholder-gray-600 text-gray-800"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          {/* Email */}
+          <div className="mb-4">
+            <div className="flex items-center gap-3 border border-gray-300 rounded-xl px-4 py-3">
+              <FiMail className="text-gray-500" />
+              <input
+                type="email"
+                placeholder="Email Address"
+                className="w-full outline-none text-gray-800"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Password */}
+          <div className="mb-6">
+            <div className="flex items-center gap-3 border border-gray-300 rounded-xl px-4 py-3">
+              <FiLock className="text-gray-500" />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="w-full outline-none text-gray-800"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-gray-500"
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </button>
+            </div>
+          </div>
+
+          {/* Signup Button */}
+          <form onSubmit={handleSignup}>
             <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="text-gray-600 hover:text-gray-800 transition-colors"
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 rounded-xl bg-sky-900 text-white font-semibold hover:bg-sky-800 transition"
             >
-              {showPassword ? (
-                <FiEyeOff className="h-5 w-5" />
-              ) : (
-                <FiEye className="h-5 w-5" />
-              )}
+              {loading ? "Creating Account..." : "Sign Up"}
             </button>
+          </form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-gray-300" />
+            <span className="text-sm text-gray-500">or</span>
+            <div className="flex-1 h-px bg-gray-300" />
           </div>
-        </div>
 
-        {/* Sign-up Button */}
-        <form onSubmit={handleSignup}>
+          {/* Google */}
           <button
-            type="submit"
-            disabled={loading}
-            className="
-              w-full py-3 rounded-xl
-              bg-gradient-to-b from-sky-900 to-sky-800
-              text-white font-medium
-              shadow-md hover:opacity-90 transition
-              disabled:opacity-50 disabled:cursor-not-allowed
-            "
+            onClick={handleGoogle}
+            className="w-full py-3 border border-gray-300 rounded-xl flex items-center justify-center gap-3 hover:bg-gray-50 transition"
           >
-            {loading ? "Creating Account..." : "Sign Up"}
+            <FcGoogle className="h-5 w-5" />
+            Continue with Google
           </button>
-        </form>
 
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 h-px bg-white/30"></div>
-          <span className="text-gray-600 text-sm">or</span>
-          <div className="flex-1 h-px bg-white/30"></div>
-        </div>
-
-        {/* Sign up with Google Button */}
-        <button
-          onClick={handleGoogle}
-          className="
-            w-full py-3 rounded-xl
-            bg-white/50 border border-white/60
-            text-gray-800 font-medium
-            shadow-md hover:bg-white/60 transition
-            flex items-center justify-center gap-3
-          "
-        >
-          <FcGoogle className="h-5 w-5" />
-          Continue with Google
-        </button>
-
-        {/* Login Link */}
-        <div className="text-center mt-6">
-          <p className="text-gray-600 text-sm">
+          {/* Login Link */}
+          <p className="text-center text-sm text-gray-600 mt-6">
             Already have an account?{" "}
-            <Link href="/login" className="font-semibold text-sky-800 hover:text-sky-900 transition-colors">
+            <Link href="/login" className="text-sky-800 font-semibold">
               Log in
             </Link>
           </p>
-        </div>
 
-        {/* Success/Error Message */}
-        {message && (
-          <div className={`mt-4 p-3 border rounded-xl backdrop-blur-sm ${
-            message.includes('successfully') || message.includes('email') 
-              ? 'bg-green-100/80 border-green-200/60' 
-              : 'bg-red-100/80 border-red-200/60'
-          }`}>
-            <p className={`text-sm text-center font-medium ${
+          {/* Success/Error Message */}
+          {message && (
+            <div className={`mt-4 text-sm text-center font-medium ${
               message.includes('successfully') || message.includes('email')
-                ? 'text-green-600' 
+                ? 'text-green-600'
                 : 'text-red-600'
             }`}>
               {message}
-            </p>
-          </div>
-        )}
-
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -60,7 +60,7 @@ export default function FoundersPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-600 to-teal-600 text-white">
+      <div className="bg-gradient-to-r md:mt-23 from-green-600 to-teal-600 text-white">
         <div className="max-w-7xl mx-auto px-8 py-16">
           <Link href="/" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -93,11 +93,11 @@ export default function FoundersPage() {
           <div className="grid md:grid-cols-2 gap-8 mb-20">
             {founderChallenges.map((item, index) => (
               <div key={index} className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
-                <h3 className="text-lg font-bold text-red-600 mb-3">
+                <h3 className="text-2xl font-bold text-red-600 mb-3">
                   Challenge: {item.challenge}
                 </h3>
-                <p className="text-gray-700">
-                  <span className="font-semibold text-green-600">Our Solution:</span> {item.solution}
+                <p className="text-xl text-gray-700">
+                  <span className="font-semibold text-green-600 text-xl">Our Solution:</span> {item.solution}
                 </p>
               </div>
             ))}

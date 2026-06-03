@@ -38,23 +38,7 @@ export const SERVICES: Service[] = [
             "Tool Stack Recommendations"
         ]
     },
-    {
-        id: "financial",
-        title: "Financial Management & Cost Control",
-        outcome: "Improve cash visibility, budgeting and reduce costs.",
-        priceRange: "₹12,999 – ₹22,999",
-        minPrice: 12999,
-        maxPrice: 22999,
-        bullets: ["Financial health check", "Cashflow clarity", "Cost reduction plan"],
-        fullDescription: "Gain control over your finances with our expert analysis. We help you understand your cash flow, set realistic budgets, and identify areas where you can reduce costs without compromising quality.",
-        timeline: "2 weeks",
-        deliverables: [
-            "Financial Health Assessment",
-            "Cash Flow Forecast Model",
-            "Cost Reduction Strategy Document",
-            "Budgeting Templates"
-        ]
-    },
+   ,
     {
         id: "bizdev",
         title: "Business Development & Strategic Partnerships",

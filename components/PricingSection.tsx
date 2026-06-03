@@ -67,22 +67,29 @@ export function PricingSection() {
           </div>
 
           {/* Service Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {SERVICES.map((service, index) => (
-              <div
-                key={service.id}
-                className={
-                  index === 1
-                    ? "featured-shadow rounded-2xl bg-white"
-                    : "card-shadow rounded-2xl bg-white"
-                }
-              >
-                <ServiceCard
-                  service={service}
-                  onViewDetails={handleViewDetails}
-                />
-              </div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {SERVICES.map((service, index) => {
+              // Blue cards for Operations and Marketing/Web Consulting
+              const isBlueCard = service.id === "operations" || service.id === "marketing";
+              return (
+                <div
+                  key={service.id}
+                  className={
+                    isBlueCard
+                      ? "featured-shadow rounded-2xl bg-[#156d95]"
+                      : index === 1
+                        ? "featured-shadow rounded-2xl bg-white"
+                        : "card-shadow rounded-2xl bg-white"
+                  }
+                >
+                  <ServiceCard
+                    service={service}
+                    onViewDetails={handleViewDetails}
+                    isBlueCard={isBlueCard}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           {/* Add-ons Section */}

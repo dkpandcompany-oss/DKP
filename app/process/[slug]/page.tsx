@@ -114,7 +114,7 @@ export default function ProcessDetailPage() {
   if (!process) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
+        <div className="text-center md:mt-23 border border-black">
           <h1 className="text-2xl font-bold mb-4">Process not found</h1>
           <button
             onClick={() => router.push("/#process")}
@@ -132,8 +132,8 @@ export default function ProcessDetailPage() {
       <div className="max-w-4xl mx-auto px-6 py-16">
         {/* Back Button */}
         <button
-          onClick={() => router.push("/#process")}
-          className="flex items-center gap-2 text-[#156d95] hover:text-[#156d95]/80 mb-8 transition-colors"
+          onClick={() => router.push("/")}
+          className="flex items-center md:mt-8 gap-2 text-[#156d95] hover:text-[#156d95]/80 mb-8 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Back to Our Process</span>

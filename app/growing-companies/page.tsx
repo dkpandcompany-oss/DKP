@@ -42,7 +42,7 @@ export default function GrowingCompaniesPage() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#156d95] to-[#1a7aa6] text-white">
-        <div className="max-w-7xl mx-auto px-8 py-16">
+        <div className="max-w-7xl mx-auto px-8 py-16 md:mt-23">
           <Link href="/" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Home

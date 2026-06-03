@@ -22,7 +22,7 @@ export default function TermsPage() {
             </Head>
 
             {/* ==================== CONTENT ==================== */}
-            <main className="prose max-w-3xl mx-auto p-8">
+            <main className="prose max-w-3xl mx-auto p-8 mt-13">
                 <h1 className="text-4xl font-bold mb-8 text-[#202020]">Terms of Service</h1>
                 <p className="text-lg mb-8 text-[#666666]">
                     By accessing or using DPK &amp; Company’s website and services you

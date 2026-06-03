@@ -48,7 +48,7 @@ export default function StartupsPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+      <div className="bg-gradient-to-r md:mt-23 from-purple-600 to-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-8 py-16">
           <Link href="/" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors">
             <ArrowLeft className="w-4 h-4 mr-2" />

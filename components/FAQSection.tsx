@@ -13,44 +13,39 @@ type FAQSectionProps = {
 }
 const defaultFAQs: FAQItem[] = [
   {
-    question: "Do you offer monthly retainers?",
+    question: "Do you offer web design services?",
     answer:
-      "Yes! While our core services are project-based, we offer monthly support retainers starting at ₹9,999/month for ongoing advisory and maintenance.",
+      "Yes, we offer comprehensive web design and development services tailored to your business needs, including UI/UX design, responsive layouts, and custom functionality.",
   },
   {
-    question: "How does the payment structure work?",
+    question: "What technologies do you specialize in?",
     answer:
-      "We typically require a 50% deposit to commence work, with the remaining 50% due upon project completion and handover.",
+      "We specialize in modern web technologies such as React, Next.js, Node.js, TypeScript, Tailwind CSS, and also integrate with platforms like Supabase and Razorpay.",
   },
   {
-    question: "Can I combine multiple services?",
+    question: "What is your process for building your website?",
     answer:
-      "Absolutely. You can use our 'Build your own package' tool to select multiple services. We often provide a bundle discount for multi-service projects.",
+      "Our process includes discovery and requirements gathering, design and prototyping, development, testing, deployment, and ongoing support. We keep you involved at every stage for feedback and transparency.",
+  },
+  {
+    question: "How do you handle website maintenance and updates?",
+    answer:
+      "We offer ongoing maintenance packages that include regular updates, security monitoring, backups, and feature enhancements to ensure your website remains secure and up-to-date.",
+  },
+  {
+    question: "What are your pricing options for web development?",
+    answer:
+      "Our pricing is flexible and depends on the project scope. We offer fixed-price packages for standard websites and custom quotes for complex solutions. Contact us for a detailed proposal tailored to your needs.",
+  },
+  {
+    question: "Can you help with SEO and website optimization?",
+    answer:
+      "Absolutely! We implement SEO best practices, optimize website speed, and ensure your site is discoverable and ranks well on search engines.",
   },
   {
     question: "What kind of businesses do you work with?",
     answer:
-      "We work with small businesses, startups, and growing companies that need structure, optimization, and strategic direction.",
-  },
-  {
-    question: "How long does a consulting engagement take?",
-    answer:
-      "Depending on scope, engagements run from 2 weeks (audit) to 3–6 months (full optimization).",
-  },
-  {
-    question: "Do you work on-site or remotely?",
-    answer:
-      "We work remotely, with on-site support available for specific engagements.",
-  },
-  {
-    question: "What is included in a process audit?",
-    answer:
-      "We evaluate workflows, financial flow, digital presence, current bottlenecks, and provide a clear, actionable improvement plan.",
-  },
-  {
-    question: "Can you help us develop partnerships or find clients?",
-    answer:
-      "Yes — we create BD structures, identify collaboration opportunities, and support strategic outreach.",
+      "We work with startups, growing companies, and founders who need structure, optimization, and strategic direction for their digital presence.",
   },
 ]
 export const FAQSection = ({ title = "Frequently asked questions", faqs = defaultFAQs }: FAQSectionProps) => {

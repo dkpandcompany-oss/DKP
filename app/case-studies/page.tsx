@@ -12,7 +12,7 @@ export default function CaseStudiesPage() {
                 />
             </Head>
 
-            <main className="prose max-w-4xl mx-auto p-8 py-16">
+            <main className="prose max-w-4xl mx-auto p-8 py-16 mt-13">
                 <h1 className="text-4xl font-bold mb-8 text-[#202020]">Case Studies</h1>
                 <p className="text-lg text-[#666666] mb-12">See how we help clients achieve measurable impact.</p>
 

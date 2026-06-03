@@ -56,7 +56,7 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white mt-13">
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
