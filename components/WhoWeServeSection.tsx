@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
+import Link from 'next/link'
 import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 
@@ -30,9 +31,9 @@ export const WhoWeServeSection = () => {
     return (
         <section id="services" className="w-full bg-white py-24 px-8 relative">
             {/* Dotted background */}
-            <div 
+            <div
                 className="absolute inset-0 opacity-10"
-               
+
             />
             <div className="max-w-7xl mx-auto relative z-10">
                 <div className="mb-16">
@@ -105,9 +106,9 @@ const Card = ({ title, description, href }: { title: string; description: string
                 <h3 className="text-2xl font-semibold text-[#111A4A] mb-4">{title}</h3>
                 <p className="text-base text-slate-600 leading-relaxed mb-8 flex-grow">{description}</p>
 
-                <a href={href} className="inline-flex items-center text-[#156d95] font-medium text-sm hover:gap-2 transition-all group-hover:text-[#167E6C]">
+                <Link href={href} className="inline-flex items-center text-[#156d95] font-medium text-sm hover:gap-2 transition-all group-hover:text-[#167E6C]">
                     Learn how we help <ArrowRight className="w-4 h-4 ml-1" />
-                </a>
+                </Link>
             </div>
         </motion.div>
     )

@@ -58,8 +58,8 @@ export function PricingSection() {
           <div className="text-center mb-16">
             <h2 className="font-figtree text-[40px] font-normal text-[#111A4A] leading-tight mb-4">
               Choose a <span className="bg-gradient-to-b from-[#156d95] to-[#156d95]/40 bg-clip-text text-transparent">
-  services
-</span>
+                services
+              </span>
             </h2>
             <p className="font-figtree text-lg text-slate-600 max-w-2xl mx-auto">
               Pick what you need — clear pricing, measurable results.
@@ -90,17 +90,6 @@ export function PricingSection() {
                 </div>
               );
             })}
-          </div>
-
-          {/* Add-ons Section */}
-          <div className="mb-16 rounded-2xl p-6 bg-white card-shadow">
-            <div className="flex items-center gap-4 mb-6">
-              <h3 className="text-xl font-semibold text-[#111A4A]">
-                Optional Add-ons
-              </h3>
-              <div className="h-px bg-slate-200 flex-grow"></div>
-            </div>
-            <AddOnsSection />
           </div>
 
           {/* Custom Package CTA */}
